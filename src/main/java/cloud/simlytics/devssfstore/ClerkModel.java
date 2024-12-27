@@ -20,7 +20,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   }
 
   @Override
-  protected void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
+  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
     modelState.remove(0);  // remove customer that exits at this time
     if (!modelState.isEmpty()) {
       serveNextCustomer(doubleSimTime);
@@ -35,7 +35,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   }
 
   @Override
-  protected void externalSateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     for (PortValue<?> pv: bag.getPortValueList()) {
       Customer customer = clerkInputPort.getValue(pv);
       modelState.add(customer);
@@ -46,13 +46,13 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   }
 
   @Override
-  protected void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     internalStateTransitionFunction(doubleSimTime);
-    externalSateTransitionFunction(doubleSimTime, bag);
+    externalStateTransitionFunction(doubleSimTime, bag);
   }
 
   @Override
-  protected DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
+  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
     if (modelState.isEmpty()) {
       return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
     } else {
@@ -62,7 +62,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   }
 
   @Override
-  protected Bag outputFunction() {
+  public Bag outputFunction() {
     Customer exitingCustomer = modelState.get(0);
     return Bag.builder().addPortValueList(clerkOutputPort.createPortValue(exitingCustomer)).build();
   }

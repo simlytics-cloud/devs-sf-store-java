@@ -1,13 +1,13 @@
 package cloud.simlytics.devssfstore;
 
 
-import akka.actor.typed.ActorRef;
-import akka.actor.typed.Behavior;
-import akka.actor.typed.javadsl.AbstractBehavior;
-import akka.actor.typed.javadsl.ActorContext;
-import akka.actor.typed.javadsl.Behaviors;
-import akka.actor.typed.javadsl.Receive;
-import akka.actor.typed.javadsl.ReceiveBuilder;
+import org.apache.pekko.actor.typed.ActorRef;
+import org.apache.pekko.actor.typed.Behavior;
+import org.apache.pekko.actor.typed.javadsl.AbstractBehavior;
+import org.apache.pekko.actor.typed.javadsl.ActorContext;
+import org.apache.pekko.actor.typed.javadsl.Behaviors;
+import org.apache.pekko.actor.typed.javadsl.Receive;
+import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
 import cloud.simlytics.devssfstore.StoreApp.StoreAppMessage;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -53,15 +53,15 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage>
         kafkaConsumerConfig = config.getConfig("kafka-readall-consumer");
         Properties kafkaClusterProperties = ConfigUtils.toProperties(kafkaClusterConfig);
         AdminClient adminClient = KafkaUtils.createAdminClient(kafkaClusterProperties);
-//        KafkaUtils.deleteTopics(
-//            Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
-//        Thread.sleep(5000);
-//        KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
-//            adminClient, Optional.of(1), Optional.empty());
+       //KafkaUtils.deleteTopics(
+       //    Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
+       //Thread.sleep(5000);
+       //KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
+       //    adminClient, Optional.of(1), Optional.empty());
 
 
-        akka.actor.typed.ActorSystem<StoreAppMessage> system =
-            akka.actor.typed.ActorSystem.create(StoreApp.create(), "StoreApp");
+        org.apache.pekko.actor.typed.ActorSystem<StoreAppMessage> system =
+            org.apache.pekko.actor.typed.ActorSystem.create(StoreApp.create(), "StoreApp");
         system.tell(new StoreStart());
     }
 

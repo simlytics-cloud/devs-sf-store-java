@@ -5,7 +5,6 @@ import devs.Port;
 import devs.msg.Bag;
 import devs.msg.PortValue;
 import devs.msg.time.DoubleSimTime;
-import devs.msg.time.LongSimTime;
 
 public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
 
@@ -17,12 +16,12 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
   }
 
   @Override
-  protected void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
+  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
 
   }
 
   @Override
-  protected void externalSateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     for (PortValue<?> pv: bag.getPortValueList()) {
       Customer customer = observerInputPort.getValue(pv);
       System.out.println("Customer leaving at " + doubleSimTime.getT() +
@@ -31,17 +30,17 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
   }
 
   @Override
-  protected void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
-    externalSateTransitionFunction(doubleSimTime, bag);
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+    externalStateTransitionFunction(doubleSimTime, bag);
   }
 
   @Override
-  protected DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
+  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
     return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
   }
 
   @Override
-  protected Bag outputFunction() {
+  public Bag outputFunction() {
     return Bag.builder().build();
   }
 }

@@ -25,7 +25,7 @@ class ClerkModelTest {
     Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
     PortValue<Customer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
     Bag bag1 = Bag.builder().addPortValueList(pv).build();
-    clerkModel.externalSateTransitionFunction(t1, bag1);
+    clerkModel.externalStateTransitionFunction(t1, bag1);
 
     // Next time should be 2
     DoubleSimTime t2 = clerkModel.timeAdvanceFunction(t1);

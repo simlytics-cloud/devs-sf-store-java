@@ -4,7 +4,6 @@ import devs.PDEVSModel;
 import devs.Port;
 import devs.msg.Bag;
 import devs.msg.time.DoubleSimTime;
-import devs.msg.time.LongSimTime;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -18,24 +17,24 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
   }
 
   @Override
-  protected void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
+  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
     // Remove the customers generated at this time.  They were sent as output during the call to
     // the output function
     modelState.remove(doubleSimTime.getT());
   }
 
   @Override
-  protected void externalSateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
 
   }
 
   @Override
-  protected void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
 
   }
 
   @Override
-  protected DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
+  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
     if (modelState.isEmpty()) {
       return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
     } else {
@@ -44,7 +43,7 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
   }
 
   @Override
-  protected Bag outputFunction() {
+  public Bag outputFunction() {
     List<Customer> customers = modelState.firstEntry().getValue();
     Bag.Builder builder = Bag.builder();
     for (Customer customer: customers) {
