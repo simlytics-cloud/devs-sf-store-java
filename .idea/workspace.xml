@@ -5,30 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c219cebc-b26e-4852-a4c9-45ae0dbc1179" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/customerTest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/AbstractCustomer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/DevsStyle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/package-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerGeneratorTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/DeleteCreateTopicsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/StoreSimulationTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/google-checkstyle-suppressions.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kafka-ui/compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/logback.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/AbstractCustomer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/AbstractCustomer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/DevsStyle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/DevsStyle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/reference.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/reference.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerGeneratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerGeneratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/DeleteCreateTopicsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/DeleteCreateTopicsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/StoreSimulationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/StoreSimulationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/reference.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/reference.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,10 +45,20 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature/2412_fixes" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="source-files" />
+    </order>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -61,23 +69,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/robertkewley/Library/CloudStorage/OneDrive-simlytics.cloud/Simlytics/dev/simlytics/devs/smf-store/src/main/java/cloud/simlytics/devssfstore&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.StoreApp.executor": "Run",
+    "JUnit.ClerkModelTest.executor": "Run",
+    "JUnit.CustomerGeneratorTest.executor": "Run",
+    "JUnit.CustomerTest.executor": "Run",
+    "JUnit.DeleteCreateTopicsTest.deleteAndCreateTopics.executor": "Run",
+    "JUnit.DeleteCreateTopicsTest.executor": "Run",
+    "JUnit.StoreSimulationTest.executor": "Run",
+    "Maven.smf-store [clean].executor": "Run",
+    "Maven.smf-store [compile].executor": "Run",
+    "Maven.smf-store [org.apache.maven.plugins:maven-site-plugin:3.21.0:site].executor": "Run",
+    "Maven.smf-store [org.apache.maven.plugins:maven-site-plugin:3.7.1:site].executor": "Run",
+    "Maven.smf-store [package].executor": "Run",
+    "Maven.smf-store [test].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/robertkewley/Library/CloudStorage/OneDrive-simlytics.cloud/Simlytics/dev/simlytics/devs/devs-smf-store-java",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "project.scopes"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/kafka-ui" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="cloud.simlytics.devssfstore" />
@@ -130,6 +163,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DeleteCreateTopicsTest.deleteAndCreateTopics" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smf-store" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cloud.simlytics.devssfstore" />
+      <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.DeleteCreateTopicsTest" />
+      <option name="METHOD_NAME" value="deleteAndCreateTopics" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="StoreSimulationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smf-store" />
       <extension name="coverage">
@@ -145,28 +194,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StoreSimulationTest.testStoreSim" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smf-store" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cloud.simlytics.devssfstore" />
-      <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.StoreSimulationTest" />
-      <option name="METHOD_NAME" value="testStoreSim" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.StoreApp" />
+        <item itemvalue="JUnit.DeleteCreateTopicsTest.deleteAndCreateTopics" />
         <item itemvalue="JUnit.DeleteCreateTopicsTest" />
         <item itemvalue="JUnit.StoreSimulationTest" />
-        <item itemvalue="JUnit.StoreSimulationTest.testStoreSim" />
         <item itemvalue="JUnit.CustomerTest" />
       </list>
     </recent_temporary>
@@ -208,33 +241,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java</url>
-          <line>44</line>
+          <line>80</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java</url>
-          <line>51</line>
+          <line>70</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java</url>
-          <line>34</line>
+          <line>53</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/proxy/KafkaReceiver.class</url>
-          <line>72</line>
-          <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <condition expression="this.devsModel.modelIdentifier.equals(&quot;clerk1&quot;)" language="JAVA" />
@@ -243,41 +261,49 @@
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="this.devsModel.modelIdentifier.equals(&quot;clerk1&quot;)" language="JAVA" />
-          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/PDevsSimulator.class</url>
-          <line>74</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="this.devsModel.modelIdentifier.equals(&quot;clerk1&quot;)" language="JAVA" />
-          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/PDevsSimulator.class</url>
-          <line>63</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/proxy/KafkaReceiver.class</url>
-          <line>91</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/proxy/KafkaDevsStreamProxy.class</url>
           <line>73</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/proxy/KafkaReceiver.class</url>
-          <line>87</line>
+          <line>90</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java</url>
-          <line>19</line>
+          <line>39</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="28" />
+          <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java</url>
+          <line>154</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
+          <line>153</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaDevsStreamProxy.java</url>
+          <line>140</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaDevsStreamProxy.java</url>
+          <line>144</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
+          <line>156</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
+          <line>125</line>
+          <option name="timeStamp" value="45" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.ClassCastException" package="java.lang" />
@@ -285,5 +311,9 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
