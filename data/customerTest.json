@@ -1,0 +1,21 @@
+{
+  "devsType": "devs.msg.ExecuteTransition",
+  "modelInputsOption": {
+    "portValueList": [
+      {
+        "@class": "cloud.simlytics.devssfstore.Customer",
+        "value": {
+          "twait": 1.0,
+          "tenter": 1.0,
+          "tleave": 0.0
+        },
+        "portIdentifier": "Line",
+        "portType": "cloud.simlytics.devssfstore.Customer"
+      }
+    ]
+  },
+  "time": {
+    "timeType": "devs.msg.time.LongSimTime",
+    "t": 0
+  }
+}
