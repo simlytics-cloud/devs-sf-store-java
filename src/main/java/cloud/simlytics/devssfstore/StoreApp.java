@@ -171,6 +171,9 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     KafkaUtils.deleteTopics(
         Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
     Thread.sleep(5000);
+
+    // Note that the Kafka Topics created must have only 1 partition in order to guaranty messages
+    //   are consumed in the same order they are published.
     KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
         adminClient, Optional.of(1), Optional.empty());
 
@@ -344,7 +347,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
    * @return A {@link Behavior} of type {@link StoreAppMessage} that transitions the actor to a
    * stopped state.
    */
-  protected Behavior<StoreAppMessage> onTerminated(Terminated signal) {
+  protected Behavior<StoreAppMessage> onTerminated(Terminated signal) throws InterruptedException {
     return Behaviors.stopped();
   }
 }

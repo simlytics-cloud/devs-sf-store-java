@@ -4,29 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c219cebc-b26e-4852-a4c9-45ae0dbc1179" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/google-checkstyle-suppressions.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kafka-ui/compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/logback.xml" afterDir="false" />
+    <list default="true" id="c219cebc-b26e-4852-a4c9-45ae0dbc1179" name="Changes" comment="Updated to use time until next transition in time advance function.  Included javadoc and copyright.">
+      <change afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copyright/simlytics_apache.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/scopes/source_files.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kafka-ui/Install Kafka.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/AbstractCustomer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/AbstractCustomer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/DevsStyle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/DevsStyle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreCouplingHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/reference.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/reference.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerGeneratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerGeneratorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/DeleteCreateTopicsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/DeleteCreateTopicsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/StoreSimulationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/StoreSimulationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/application.conf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/reference.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/reference.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +46,9 @@
     <order>
       <scope name="source-files" />
     </order>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -96,7 +86,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "project.scopes"
+    "settings.editor.selected.configurable": "preferences.editor"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -220,6 +210,15 @@
       <workItem from="1692274117722" duration="3160000" />
       <workItem from="1697401061959" duration="485000" />
     </task>
+    <task id="LOCAL-00001" summary="Updated to use time until next transition in time advance function.  Included javadoc and copyright.">
+      <option name="closed" value="true" />
+      <created>1735569948875</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1735569948875</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,6 +234,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated to use time until next transition in time advance function.  Included javadoc and copyright." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated to use time until next transition in time advance function.  Included javadoc and copyright." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
