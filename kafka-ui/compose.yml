@@ -32,6 +32,7 @@ services:
     image: provectuslabs/kafka-ui
     hostname: kafka-ui
     container_name: kafka_ui
+    network_mode: host
     depends_on:
     - broker
     ports:

@@ -318,7 +318,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = getContext().spawn(PDevsCoordinator.create(
-            "storeCoordinator", "root", modelSimulators, storeCouplings),
+            "storeCoordinator", modelSimulators, storeCouplings),
         "storeCoordinator");
 
     if (runLocal) {
