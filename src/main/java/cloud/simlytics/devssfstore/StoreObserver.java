@@ -35,7 +35,7 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * port is used to handle incoming data related to customer activities, such as their departure
    * times and waiting periods, within the simulation.
    */
-  public static Port<Customer> observerInputPort = new Port<>("INPUT", Customer.class);
+  public static Port<ImmutableCustomer> observerInputPort = new Port<>("INPUT", ImmutableCustomer.class);
 
   /**
    * Constructs a StoreObserver model used to monitor customer behaviors. This model observes
@@ -64,9 +64,9 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
   @Override
   public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     for (PortValue<?> pv : bag.getPortValueList()) {
-      Customer customer = observerInputPort.getValue(pv);
+      ImmutableCustomer customer = observerInputPort.getValue(pv);
       System.out.println("Customer leaving at " + doubleSimTime.getT()
-          + " after a wait of " + customer.getTwait());
+          + " after a wait of " + customer.twait());
     }
   }
 

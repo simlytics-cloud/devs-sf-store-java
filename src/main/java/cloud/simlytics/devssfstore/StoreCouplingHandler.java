@@ -56,14 +56,14 @@ public class StoreCouplingHandler extends OutputCouplingHandler {
       List<PortValue<?>> outputList) {
     // Send messages from the clerk to the StoreObserver
     if (sender.startsWith("clerk")) {
-      Customer customer = ClerkModel.clerkOutputPort.getValue(portValue);
-      PortValue<Customer> inputPortValue = StoreObserver.observerInputPort.createPortValue(
+      ImmutableCustomer customer = ClerkModel.clerkOutputPort.getValue(portValue);
+      PortValue<ImmutableCustomer> inputPortValue = StoreObserver.observerInputPort.createPortValue(
           customer);
       addInputPortValue(inputPortValue, StoreObserver.modelIdentifier, receiverMap);
       // Send messages from the CustomerGenerator to clerk1
     } else if (sender.equals(CustomerGenerator.modelIdentifier)) {
       Customer customer = CustomerGenerator.generatorOutputPort.getValue(portValue);
-      PortValue<Customer> inputPortValue = ClerkModel.clerkInputPort.createPortValue(customer);
+      PortValue<ImmutableCustomer> inputPortValue = ClerkModel.clerkInputPort.createPortValue(customer.toImmutable());
       addInputPortValue(inputPortValue, "clerk1", receiverMap);
     }
   }

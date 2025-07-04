@@ -71,22 +71,22 @@ class ClerkModelTest {
 
     // Send first customer
     Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
-    PortValue<Customer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
+    PortValue<ImmutableCustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1.toImmutable());
     Bag bag1 = Bag.builder().addPortValueList(pv).build();
     clerkModel.externalStateTransitionFunction(t1, bag1);
 
-    // Next time should be 2
+    // Time advance should be 1.0
     DoubleSimTime t = clerkModel.timeAdvanceFunction(t1);
     assertEquals(1.0, t.getT(), 0.01);
 
     // Output first customer and do confluent state transition at t2
     Bag outBag2 = clerkModel.outputFunction();
-    Customer outCustomer2 = ClerkModel.clerkOutputPort.getValue(outBag2.getPortValueList().get(0));
+    Customer outCustomer2 = ClerkModel.clerkOutputPort.getValue(outBag2.getPortValueList().get(0)).toMutable();
     assertEquals(2.0, outCustomer2.getTleave(), 0.01);
 
     Customer inCustomer2 = Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build();
     Bag inBag2 = Bag.builder().addPortValueList(
-        ClerkModel.clerkInputPort.createPortValue(inCustomer2)).build();
+        ClerkModel.clerkInputPort.createPortValue(inCustomer2.toImmutable())).build();
     clerkModel.confluentStateTransitionFunction(DoubleSimTime.create(2.0), inBag2);
 
     // Next transition should be at t = 6
@@ -94,8 +94,8 @@ class ClerkModelTest {
     assertEquals(4.0, t4.getT(), 0.01);
 
     Bag outBag6 = clerkModel.outputFunction();
-    Customer outCustomer6 = ClerkModel.clerkOutputPort.getValue(outBag6.getPortValueList().get(0));
-    assertEquals(6.0, outCustomer6.getTleave(), 0.01);
+    ImmutableCustomer outCustomer6 = ClerkModel.clerkOutputPort.getValue(outBag6.getPortValueList().get(0));
+    assertEquals(6.0, outCustomer6.tleave(), 0.01);
   }
 
 }

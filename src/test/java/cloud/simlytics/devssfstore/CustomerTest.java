@@ -58,19 +58,23 @@ public class CustomerTest {
   @Test
   @DisplayName("Serialize and deserialize customer port value")
   void serializeDeserializeCustomerPortValue() throws IOException {
-    Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
+    Customer customer = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
+    ImmutableCustomer customer1 = customer.toImmutable();
 
     String customer1Json = objectMapper.writeValueAsString(customer1);
     System.out.println(customer1Json);
 
-    PortValue<Customer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
+    Customer customer2 = objectMapper.readValue(customer1Json, Customer.class);
+
+    PortValue<ImmutableCustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
     Bag inputBag = Bag.builder().addPortValueList(pv).build();
     ExecuteTransition<?> executeTransition = ExecuteTransition.builder()
         .time(LongSimTime.builder().t(0L).build())
         .modelInputsOption(inputBag)
         .build();
 
-    String executeTransitionJson2 = objectMapper.writeValueAsString(executeTransition);
+    String executeTransitionJson2 = objectMapper.writerWithDefaultPrettyPrinter()
+        .writeValueAsString(executeTransition);
     System.out.println(executeTransitionJson2);
 
     DevsMessage devsMessage = objectMapper.readValue(executeTransitionJson2, DevsMessage.class);
@@ -79,7 +83,7 @@ public class CustomerTest {
         devsMessage;
     PortValue<?> pvDes = executeTransitionDes.getModelInputsOption().get().getPortValueList()
         .get(0);
-    assert pvDes.getValue() instanceof Customer;
+    assert pvDes.getValue() instanceof ImmutableCustomer;
 
   }
 

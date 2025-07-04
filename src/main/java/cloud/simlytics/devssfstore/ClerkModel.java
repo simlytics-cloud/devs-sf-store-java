@@ -47,14 +47,14 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * the clerk. - The model's external state transition processes customers arriving through this
    * port.
    */
-  public static Port<Customer> clerkInputPort = new Port<>("arrive", Customer.class);
+  public static Port<ImmutableCustomer> clerkInputPort = new Port<>("arrive", ImmutableCustomer.class);
 
   /**
    * Represents the output port for the ClerkModel, used to send Customer entities when they are
    * done being processed. This port is associated with the "depart" event and is configured to
    * handle Customer objects.
    */
-  public static Port<Customer> clerkOutputPort = new Port<>("depart", Customer.class);
+  public static Port<ImmutableCustomer> clerkOutputPort = new Port<>("depart", ImmutableCustomer.class);
 
   /**
    * Creates a new instance of the ClerkModel with the specified model identifier.
@@ -93,7 +93,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   private void serveNextCustomer(DoubleSimTime doubleSimTime) {
     // Start serving next customer
     Customer nextCustomer = modelState.remove(0);
-    nextCustomer = nextCustomer.withTleave(doubleSimTime.getT() + nextCustomer.getTwait());
+    nextCustomer.setTleave(doubleSimTime.getT() + nextCustomer.getTwait());
     modelState.add(0, nextCustomer);
   }
 
@@ -109,7 +109,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   @Override
   public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     for (PortValue<?> pv : bag.getPortValueList()) {
-      Customer customer = clerkInputPort.getValue(pv);
+      Customer customer =clerkInputPort.getValue(pv).toMutable();
       modelState.add(customer);
       if (modelState.size() == 1) { // If this is the first customer, start serving
         serveNextCustomer(doubleSimTime);
@@ -168,6 +168,6 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   @Override
   public Bag outputFunction() {
     Customer exitingCustomer = modelState.get(0);
-    return Bag.builder().addPortValueList(clerkOutputPort.createPortValue(exitingCustomer)).build();
+    return Bag.builder().addPortValueList(clerkOutputPort.createPortValue(exitingCustomer.toImmutable())).build();
   }
 }
