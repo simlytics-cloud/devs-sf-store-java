@@ -15,6 +15,20 @@
 
 package cloud.simlytics.devssfstore;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public interface MutableImmutable {
+  default Field[] getAllFields(Class<?> type) {
+    List<Field> fields = new ArrayList<>();
+    while (type != null && !type.equals(Object.class)) {
+      fields.addAll(Arrays.asList(type.getDeclaredFields()));
+      type = type.getSuperclass();
+    }
+    return fields.toArray(new Field[0]);
+
+  }
 
 }

@@ -95,7 +95,7 @@ class ClerkModelTest {
 
     Bag outBag6 = clerkModel.outputFunction();
     ImmutableCustomer outCustomer6 = ClerkModel.clerkOutputPort.getValue(outBag6.getPortValueList().get(0));
-    assertEquals(6.0, outCustomer6.tleave(), 0.01);
+    assertEquals(6.0, outCustomer6.getTleave(), 0.01);
   }
 
 }

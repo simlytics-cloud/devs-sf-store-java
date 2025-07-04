@@ -15,12 +15,20 @@
 
 package cloud.simlytics.devssfstore;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
+
 public interface Mutable<I extends Immutable<?>> extends MutableImmutable {
+
+
   @SuppressWarnings("unchecked")
   default I toImmutable() {
+    
     try {
       // 1. Resolve Immutable class name by convention
       String mutableClassName = this.getClass().getName();
@@ -31,17 +39,35 @@ public interface Mutable<I extends Immutable<?>> extends MutableImmutable {
       Class<?> immutableClass = Class.forName(immutableClassName);
 
       // 2. Collect constructor arguments by field order
-      Field[] fields = this.getClass().getDeclaredFields();
-      Object[] args = new Object[fields.length];
+      Field[] fields = getAllFields(this.getClass());
 
-      for (int i = 0; i < fields.length; i++) {
-        fields[i].setAccessible(true);
-        Object raw = fields[i].get(this);
-        args[i] = MutabilityUtil.toImmutable(raw);
-      }
+      Constructor<?> ctor = Arrays.stream(immutableClass.getDeclaredConstructors())
+          .filter(constructor -> constructor.getParameterCount() == fields.length)
+          .findFirst()
+          .orElseThrow(() -> new RuntimeException(
+              "No matching constructor found for " + immutableClassName));
 
-      // 3. Call matching constructor
-      Constructor<?> ctor = immutableClass.getDeclaredConstructors()[0];
+      Object[] args = Arrays.stream(ctor.getParameters())
+          .map(parameter -> {
+            String paramName = parameter.getName();
+            Class<?> paramType = parameter.getType();
+            return Arrays.stream(fields)
+                .filter(
+                    field -> field.getName().equals(paramName) && field.getType().equals(paramType))
+                .findFirst()
+                .map(field -> {
+                  try {
+                    field.setAccessible(true);
+                    return MutabilityUtil.toImmutable(field.get(this));
+                  } catch (IllegalAccessException e) {
+                    throw new RuntimeException("Failed to access field: " + field.getName(), e);
+                  }
+                })
+                .orElseThrow(
+                    () -> new RuntimeException("No matching field for parameter: " + paramName));
+          })
+          .toArray();
+
       return (I) ctor.newInstance(args);
 
     } catch (Exception e) {

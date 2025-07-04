@@ -66,7 +66,7 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
     for (PortValue<?> pv : bag.getPortValueList()) {
       ImmutableCustomer customer = observerInputPort.getValue(pv);
       System.out.println("Customer leaving at " + doubleSimTime.getT()
-          + " after a wait of " + customer.twait());
+          + " after a wait of " + customer.getTwait());
     }
   }
 

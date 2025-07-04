@@ -15,7 +15,23 @@
 
 package cloud.simlytics.devssfstore;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Value;
 
-public record ImmutableCustomer(double twait, double tenter, double tleave) implements Immutable<Customer> {
+@Value
+public class ImmutableCustomer extends AbstractCustomer implements Immutable<Customer> {
 
+  double tleave;
+
+  @Builder(toBuilder = true)
+  @JsonCreator
+  public ImmutableCustomer(
+      @JsonProperty("twait") double twait,
+      @JsonProperty("tenter") double tenter,
+      @JsonProperty("tleave") double tleave) {
+    super(twait, tenter);
+    this.tleave = tleave;
+  }
 }

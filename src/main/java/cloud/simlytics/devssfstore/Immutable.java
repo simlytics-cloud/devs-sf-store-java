@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
 
 public interface Immutable<M extends Mutable<?>> extends MutableImmutable {
   default M toMutable() {
+    
     try {
       // 1. Figure out the target mutable class
       String immutableClassName = this.getClass().getName();
@@ -29,20 +30,23 @@ public interface Immutable<M extends Mutable<?>> extends MutableImmutable {
       Object mutableInstance = mutableClass.getDeclaredConstructor().newInstance();
 
       // 2. Copy fields using reflection
-      for (Field field : this.getClass().getDeclaredFields()) {
-        if (Modifier.isStatic(field.getModifiers())) continue;
+
+      for (Field field : getAllFields(this.getClass())) {
+        if (Modifier.isStatic(field.getModifiers())) {
+          continue;
+        }
 
         field.setAccessible(true);
         Object value = field.get(this);
 
         Object transformedValue = MutabilityUtil.toMutable(value);
 
-        try {
-          Field mutableField = mutableClass.getDeclaredField(field.getName());
-          mutableField.setAccessible(true);
-          mutableField.set(mutableInstance, transformedValue);
-        } catch (NoSuchFieldException ignored) {
-          // skip unknown fields
+        for (Field mutableField : getAllFields(mutableClass)) {
+          if (mutableField.getName().equals(field.getName())) {
+            mutableField.setAccessible(true);
+            mutableField.set(mutableInstance, transformedValue);
+            break;
+          }
         }
       }
 
@@ -53,3 +57,5 @@ public interface Immutable<M extends Mutable<?>> extends MutableImmutable {
     }
   }
 }
+
+
