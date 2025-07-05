@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AbstractCustomer {
   double twait;
   double tenter;

@@ -21,8 +21,9 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-public class ImmutableCustomer extends AbstractCustomer implements Immutable<Customer> {
-
+public class ImmutableCustomer implements Immutable<Customer> {
+  double twait;
+  double tenter;
   double tleave;
 
   @Builder(toBuilder = true)
@@ -31,7 +32,8 @@ public class ImmutableCustomer extends AbstractCustomer implements Immutable<Cus
       @JsonProperty("twait") double twait,
       @JsonProperty("tenter") double tenter,
       @JsonProperty("tleave") double tleave) {
-    super(twait, tenter);
+    this.twait = twait;
+    this.tenter = tenter;
     this.tleave = tleave;
   }
 }

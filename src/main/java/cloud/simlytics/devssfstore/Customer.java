@@ -30,7 +30,8 @@ public class Customer extends AbstractCustomer implements Mutable<ImmutableCusto
 
   @Builder(toBuilder = true)
   public Customer(double twait, double tenter, double tleave) {
-    super(twait, tenter);
+    this.twait = twait;
+    this.tenter = tenter;
     this.tleave = tleave;
   }
 }

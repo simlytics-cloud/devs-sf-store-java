@@ -41,34 +41,21 @@ public interface Mutable<I extends Immutable<?>> extends MutableImmutable {
       // 2. Collect constructor arguments by field order
       Field[] fields = getAllFields(this.getClass());
 
-      Constructor<?> ctor = Arrays.stream(immutableClass.getDeclaredConstructors())
-          .filter(constructor -> constructor.getParameterCount() == fields.length)
-          .findFirst()
-          .orElseThrow(() -> new RuntimeException(
-              "No matching constructor found for " + immutableClassName));
+      Class<?> builderClass = Arrays.stream(immutableClass.getDeclaredClasses())
+          .filter(c -> c.getSimpleName().endsWith("Builder"))
+          .findFirst().get();
+      Object builder = immutableClass.getMethod("builder").invoke(null);
 
-      Object[] args = Arrays.stream(ctor.getParameters())
-          .map(parameter -> {
-            String paramName = parameter.getName();
-            Class<?> paramType = parameter.getType();
-            return Arrays.stream(fields)
-                .filter(
-                    field -> field.getName().equals(paramName) && field.getType().equals(paramType))
-                .findFirst()
-                .map(field -> {
-                  try {
-                    field.setAccessible(true);
-                    return MutabilityUtil.toImmutable(field.get(this));
-                  } catch (IllegalAccessException e) {
-                    throw new RuntimeException("Failed to access field: " + field.getName(), e);
-                  }
-                })
-                .orElseThrow(
-                    () -> new RuntimeException("No matching field for parameter: " + paramName));
-          })
-          .toArray();
+      for (Field field : fields) {
+        field.setAccessible(true);
+        Object fieldValue = MutabilityUtil.toImmutable(field.get(this));
+        String setterMethodName = field.getName();
 
-      return (I) ctor.newInstance(args);
+        builderClass.getMethod(setterMethodName, field.getType())
+            .invoke(builder, fieldValue);
+      }
+
+      return (I) builderClass.getMethod("build").invoke(builder);
 
     } catch (Exception e) {
       throw new RuntimeException("Failed to convert to immutable: " + this.getClass().getName(), e);
