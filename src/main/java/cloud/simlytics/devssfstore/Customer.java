@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Customer extends AbstractCustomer implements Mutable<ImmutableCustomer> {
   double tleave;
