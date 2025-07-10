@@ -23,9 +23,52 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 
+/**
+ * Represents a marker interface for mutable objects that can be converted into an immutable
+ * representation. Classes implementing this interface are expected to adhere to a naming
+ * convention where their corresponding immutable counterparts have a prefix "Immutable" added
+ * to their class name.
+ *
+ * Classes implementing this interface are required to provide logic that ensures mutability
+ * is converted into an immutable form via the {@code toImmutable()} method. This involves
+ * utilizing reflection to inspect fields and invoking the builder methods of the corresponding
+ * immutable class.
+ *
+ * The generic type parameter {@code I} extends {@code Immutable<?>} and represents the target
+ * immutable type that the implementing class can convert into.
+ *
+ * Key points:
+ * - The {@code toImmutable()} method creates an immutable instance by identifying the appropriate
+ *   immutable class corresponding to the mutable class and using its builder pattern methods.
+ * - Field values in the mutable instance are transformed into their immutable representations
+ *   before assigning them to the immutable object.
+ * - Reflection is used to access fields of the class, including private ones.
+ * - Convention dictates that the corresponding immutable class should have a "Builder" inner
+ *   class, a static "builder" method, and a "build" method for constructing instances.
+ *
+ * Exceptions:
+ * - If the conversion process fails due to any reason (e.g., class not found, field access
+ *   issues, missing builder methods), a {@code RuntimeException} is thrown.
+ *
+ * Note that the implementing classes must ensure their mutability is appropriately implemented
+ * to enable seamless conversion to their immutable counterparts.
+ *
+ * @param <I> The type of the immutable object that this mutable object can convert into.
+ */
 public interface Mutable<I extends Immutable<?>> extends MutableImmutable {
 
 
+  /**
+   * Converts the current mutable object into its immutable counterpart.
+   * The method relies on naming conventions to locate the corresponding
+   * immutable class and its builder, then initializes the immutable object
+   * using the field values from the current object.
+   *
+   * @return The immutable version of the current mutable object.
+   * @throws RuntimeException if the conversion to immutable fails due
+   *         to an error such as class not found, method invocation issues,
+   *         or illegal access.
+   */
   @SuppressWarnings("unchecked")
   default I toImmutable() {
     
