@@ -21,7 +21,7 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-public class ImmutableCustomer implements Immutable<Customer> {
+public class ImmutableCustomer implements Immutable<Customer>, ICustomer {
   double twait;
   double tenter;
   double tleave;

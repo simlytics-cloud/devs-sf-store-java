@@ -71,7 +71,7 @@ class ClerkModelTest {
 
     // Send first customer
     Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
-    PortValue<ImmutableCustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1.toImmutable());
+    PortValue<ICustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
     Bag bag1 = Bag.builder().addPortValueList(pv).build();
     clerkModel.externalStateTransitionFunction(t1, bag1);
 

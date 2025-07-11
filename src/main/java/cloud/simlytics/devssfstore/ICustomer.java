@@ -15,22 +15,6 @@
 
 package cloud.simlytics.devssfstore;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+public interface ICustomer {
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-public class Customer extends AbstractCustomer implements Mutable<ImmutableCustomer>, ICustomer {
-  double tleave;
-
-  @Builder(toBuilder = true)
-  public Customer(double twait, double tenter, double tleave) {
-    this.twait = twait;
-    this.tenter = tenter;
-    this.tleave = tleave;
-  }
 }
