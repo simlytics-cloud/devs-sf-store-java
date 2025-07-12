@@ -35,7 +35,7 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * port is used to handle incoming data related to customer activities, such as their departure
    * times and waiting periods, within the simulation.
    */
-  public static Port<ImmutableCustomer> observerInputPort = new Port<>("INPUT", ImmutableCustomer.class);
+  public static Port<ImmutableCustomer> observerInputPort = new Port<>("INPUT");
 
   /**
    * Constructs a StoreObserver model used to monitor customer behaviors. This model observes

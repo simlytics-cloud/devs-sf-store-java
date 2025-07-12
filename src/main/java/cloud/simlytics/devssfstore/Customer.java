@@ -15,6 +15,7 @@
 
 package cloud.simlytics.devssfstore;
 
+import devs.msg.mutability.Mutable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class Customer extends AbstractCustomer implements Mutable<ImmutableCustomer>, ICustomer {
+public class Customer extends AbstractCustomer implements Mutable, ICustomer {
   double tleave;
 
   @Builder(toBuilder = true)

@@ -4,16 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c219cebc-b26e-4852-a4c9-45ae0dbc1179" name="Changes" comment="Updated to use time until next transition in time advance function.  Included javadoc and copyright.">
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/simlytics_apache.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/scopes/source_files.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kafka-ui/Install Kafka.md" afterDir="false" />
+    <list default="true" id="c219cebc-b26e-4852-a4c9-45ae0dbc1179" name="Changes" comment="Add ICustomer interface and refactor ports for flexibility&#10;&#10;Introduced the `ICustomer` interface to generalize customer types, implemented it in both `Customer` and `ImmutableCustomer`. Refactored `Port` to `ImmutablePort` for better handling of mutable and immutable objects, ensuring smoother type compatibility and cleaner extensibility across the system.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/reference.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/reference.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/CustomerGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/Immutable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ImmutableCustomer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ImmutableCustomer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ImmutablePort.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/MutabilityUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/Mutable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/MutableImmutable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/StoreObserver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +29,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit5 Test Class" />
+        <option value="Kotlin Class" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -34,7 +38,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/2412_fixes" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,6 +57,9 @@
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2TWhDlGqHR2xxw8AbwkDC3ZG1gM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -63,30 +70,40 @@
   "keyToString": {
     "Application.StoreApp.executor": "Run",
     "JUnit.ClerkModelTest.executor": "Run",
+    "JUnit.ClerkModelTest.testClerkModel.executor": "Run",
     "JUnit.CustomerGeneratorTest.executor": "Run",
     "JUnit.CustomerTest.executor": "Run",
+    "JUnit.CustomerTest.serializeDeserializeCustomerPortValue.executor": "Debug",
     "JUnit.DeleteCreateTopicsTest.deleteAndCreateTopics.executor": "Run",
     "JUnit.DeleteCreateTopicsTest.executor": "Run",
     "JUnit.StoreSimulationTest.executor": "Run",
     "Maven.smf-store [clean].executor": "Run",
     "Maven.smf-store [compile].executor": "Run",
+    "Maven.smf-store [install].executor": "Run",
     "Maven.smf-store [org.apache.maven.plugins:maven-site-plugin:3.21.0:site].executor": "Run",
     "Maven.smf-store [org.apache.maven.plugins:maven-site-plugin:3.7.1:site].executor": "Run",
     "Maven.smf-store [package].executor": "Run",
     "Maven.smf-store [test].executor": "Run",
+    "Maven.smf-store [validate].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/mutable__immutable",
+    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/robertkewley/Library/CloudStorage/OneDrive-simlytics.cloud/Simlytics/dev/simlytics/devs/devs-smf-store-java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.editor"
+    "settings.editor.selected.configurable": "preferences.editor",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -109,13 +126,13 @@
       <recent name="cloud.simlytics.devssfstore" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.StoreApp">
+  <component name="RunManager" selected="JUnit.ClerkModelTest.testClerkModel">
     <configuration name="StoreApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.StoreApp" />
       <module name="smf-store" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
+          <option name="PATTERN" value="devs.msg.mutability.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -123,17 +140,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CustomerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ClerkModelTest.testClerkModel" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smf-store" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
+          <option name="PATTERN" value="devs.msg.mutability.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cloud.simlytics.devssfstore" />
+      <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.ClerkModelTest" />
+      <option name="METHOD_NAME" value="testClerkModel" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CustomerTest.serializeDeserializeCustomerPortValue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smf-store" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="devs.msg.mutability.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="cloud.simlytics.devssfstore" />
       <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.CustomerTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="serializeDeserializeCustomerPortValue" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -142,7 +176,7 @@
       <module name="smf-store" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
+          <option name="PATTERN" value="devs.msg.mutability.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -157,7 +191,7 @@
       <module name="smf-store" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
+          <option name="PATTERN" value="devs.msg.mutability.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -169,30 +203,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StoreSimulationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smf-store" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cloud.simlytics.devssfstore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cloud.simlytics.devssfstore" />
-      <option name="MAIN_CLASS_NAME" value="cloud.simlytics.devssfstore.StoreSimulationTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ClerkModelTest.testClerkModel" />
+        <item itemvalue="JUnit.CustomerTest.serializeDeserializeCustomerPortValue" />
         <item itemvalue="Application.StoreApp" />
         <item itemvalue="JUnit.DeleteCreateTopicsTest.deleteAndCreateTopics" />
         <item itemvalue="JUnit.DeleteCreateTopicsTest" />
-        <item itemvalue="JUnit.StoreSimulationTest" />
-        <item itemvalue="JUnit.CustomerTest" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -209,6 +236,8 @@
       <workItem from="1692142944978" duration="13000" />
       <workItem from="1692274117722" duration="3160000" />
       <workItem from="1697401061959" duration="485000" />
+      <workItem from="1735591471386" duration="299000" />
+      <workItem from="1751456367017" duration="50904000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to use time until next transition in time advance function.  Included javadoc and copyright.">
       <option name="closed" value="true" />
@@ -218,7 +247,63 @@
       <option name="project" value="LOCAL" />
       <updated>1735569948875</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added Readme.md and LICENSE.txt.">
+      <option name="closed" value="true" />
+      <created>1735576956595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735576956595</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Refactor customer classes to support immutability.&#10;&#10;Replaced `AbstractCustomer` with `Customer` and `ImmutableCustomer`, introducing a clear distinction between mutable and immutable customer representations. Added utility classes `MutabilityUtil`, `Mutable`, and `Immutable` to handle conversions between mutable and immutable types. Updated relevant tests, models, and dependencies to align with these changes.">
+      <option name="closed" value="true" />
+      <created>1751623191317</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751623191317</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Refactor mutability-immutability handling and class hierarchy.&#10;&#10;Introduce `AbstractCustomer` to unify shared fields and logic between `Customer` and `ImmutableCustomer`. Extend `MutableImmutable` with `getAllFields` for better field handling via reflection. Enhance immutability and mutability conversions with constructor matching and improved reflection logic.">
+      <option name="closed" value="true" />
+      <created>1751633634860</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1751633634860</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Refactor Customer classes and Mutable to use builder pattern&#10;&#10;Replaced constructor-based initialization with builder pattern in `Customer`, `ImmutableCustomer`, and `Mutable` for improved flexibility and maintainability. Removed unnecessary annotations and constructor logic in `AbstractCustomer`. Cleaned up Maven compiler settings in `pom.xml` by removing unused arguments.">
+      <option name="closed" value="true" />
+      <created>1751717779166</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1751717779166</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Refactor mutability utilities and update dependencies&#10;&#10;Streamlined mutability conversions by adding specific handling for various collection and map types. Replaced MapStruct dependency with Guava to leverage its immutable collections. Removed unnecessary `@AllArgsConstructor` annotation from Customer class.">
+      <option name="closed" value="true" />
+      <created>1752061376728</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1752061376728</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add javadoc comments for mutability and immutability utilities&#10;&#10;Provided detailed documentation for interfaces and utility methods supporting object mutability and immutability conversions. This includes explanations for methods like `toImmutable`, `toMutable`, and field inspection utilities to enhance clarity and usability.">
+      <option name="closed" value="true" />
+      <created>1752148397323</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1752148397323</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Add ICustomer interface and refactor ports for flexibility&#10;&#10;Introduced the `ICustomer` interface to generalize customer types, implemented it in both `Customer` and `ImmutableCustomer`. Refactored `Port` to `ImmutablePort` for better handling of mutable and immutable objects, ensuring smoother type compatibility and cleaner extensibility across the system.">
+      <option name="closed" value="true" />
+      <created>1752236720926</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1752236720926</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +322,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated to use time until next transition in time advance function.  Included javadoc and copyright." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated to use time until next transition in time advance function.  Included javadoc and copyright." />
+    <MESSAGE value="Added Readme.md and LICENSE.txt." />
+    <MESSAGE value="Refactor customer classes to support immutability.&#10;&#10;Replaced `AbstractCustomer` with `Customer` and `ImmutableCustomer`, introducing a clear distinction between mutable and immutable customer representations. Added utility classes `MutabilityUtil`, `Mutable`, and `Immutable` to handle conversions between mutable and immutable types. Updated relevant tests, models, and dependencies to align with these changes." />
+    <MESSAGE value="Refactor mutability-immutability handling and class hierarchy.&#10;&#10;Introduce `AbstractCustomer` to unify shared fields and logic between `Customer` and `ImmutableCustomer`. Extend `MutableImmutable` with `getAllFields` for better field handling via reflection. Enhance immutability and mutability conversions with constructor matching and improved reflection logic." />
+    <MESSAGE value="Refactor Customer classes and Mutable to use builder pattern&#10;&#10;Replaced constructor-based initialization with builder pattern in `Customer`, `ImmutableCustomer`, and `Mutable` for improved flexibility and maintainability. Removed unnecessary annotations and constructor logic in `AbstractCustomer`. Cleaned up Maven compiler settings in `pom.xml` by removing unused arguments." />
+    <MESSAGE value="Refactor mutability utilities and update dependencies&#10;&#10;Streamlined mutability conversions by adding specific handling for various collection and map types. Replaced MapStruct dependency with Guava to leverage its immutable collections. Removed unnecessary `@AllArgsConstructor` annotation from Customer class." />
+    <MESSAGE value="Add javadoc comments for mutability and immutability utilities&#10;&#10;Provided detailed documentation for interfaces and utility methods supporting object mutability and immutability conversions. This includes explanations for methods like `toImmutable`, `toMutable`, and field inspection utilities to enhance clarity and usability." />
+    <MESSAGE value="Add ICustomer interface and refactor ports for flexibility&#10;&#10;Introduced the `ICustomer` interface to generalize customer types, implemented it in both `Customer` and `ImmutableCustomer`. Refactored `Port` to `ImmutablePort` for better handling of mutable and immutable objects, ensuring smoother type compatibility and cleaner extensibility across the system." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add ICustomer interface and refactor ports for flexibility&#10;&#10;Introduced the `ICustomer` interface to generalize customer types, implemented it in both `Customer` and `ImmutableCustomer`. Refactored `Port` to `ImmutablePort` for better handling of mutable and immutable objects, ensuring smoother type compatibility and cleaner extensibility across the system." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -246,11 +338,6 @@
           <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/ClerkModelTest.java</url>
           <line>80</line>
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java</url>
@@ -270,7 +357,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT.jar!/devs/proxy/KafkaReceiver.class</url>
-          <line>90</line>
+          <line>87</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -279,34 +366,34 @@
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cloud/simlytics/devssfstore/ClerkModel.java</url>
-          <line>154</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
-          <line>153</line>
+          <line>109</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaDevsStreamProxy.java</url>
-          <line>140</line>
+          <line>99</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaDevsStreamProxy.java</url>
-          <line>144</line>
+          <line>104</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
-          <line>156</line>
+          <line>112</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/cloud/simlytics/devs-streaming/1.0-SNAPSHOT/devs-streaming-1.0-SNAPSHOT-sources.jar!/devs/proxy/KafkaReceiver.java</url>
-          <line>125</line>
+          <line>82</line>
           <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/cloud/simlytics/devssfstore/CustomerTest.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.ClassCastException" package="java.lang" />

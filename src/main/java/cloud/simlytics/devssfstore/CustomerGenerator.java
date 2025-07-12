@@ -57,7 +57,7 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
    * The primary purpose of `generatorOutputPort` is to facilitate communication of customer data to
    * other connected models within the simulation environment.
    */
-  public static Port<Customer> generatorOutputPort = new Port<>("OUTPUT", Customer.class);
+  public static Port<Customer> generatorOutputPort = new Port<>("OUTPUT");
 
   /**
    * Constructs a CustomerGenerator with the given model state.

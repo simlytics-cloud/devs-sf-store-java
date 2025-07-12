@@ -17,6 +17,7 @@ package cloud.simlytics.devssfstore;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import devs.msg.mutability.Immutable;
 import lombok.Builder;
 import lombok.Value;
 

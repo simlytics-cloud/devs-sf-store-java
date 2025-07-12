@@ -22,6 +22,7 @@ import devs.msg.PortValue;
 import devs.msg.time.DoubleSimTime;
 import java.util.ArrayList;
 import java.util.List;
+import devs.msg.mutability.ImmutablePort;
 
 /**
  * Represents a clerk model in a PDEVS (Parallel Discrete Event System) simulation. This model
@@ -47,14 +48,14 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * the clerk. - The model's external state transition processes customers arriving through this
    * port.
    */
-  public static ImmutablePort<ICustomer> clerkInputPort = new ImmutablePort<>("arrive", ICustomer.class);
+  public static ImmutablePort<ICustomer> clerkInputPort = new ImmutablePort<>("arrive");
 
   /**
    * Represents the output port for the ClerkModel, used to send Customer entities when they are
    * done being processed. This port is associated with the "depart" event and is configured to
    * handle Customer objects.
    */
-  public static Port<ImmutableCustomer> clerkOutputPort = new Port<>("depart", ImmutableCustomer.class);
+  public static Port<ImmutableCustomer> clerkOutputPort = new Port<>("depart");
 
   /**
    * Creates a new instance of the ClerkModel with the specified model identifier.
