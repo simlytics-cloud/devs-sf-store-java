@@ -18,6 +18,7 @@ package cloud.simlytics.devssfstore;
 import devs.PDEVSModel;
 import devs.Port;
 import devs.msg.Bag;
+import devs.msg.mutability.ImmutablePort;
 import devs.msg.time.DoubleSimTime;
 import java.util.List;
 import java.util.TreeMap;
@@ -57,7 +58,7 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
    * The primary purpose of `generatorOutputPort` is to facilitate communication of customer data to
    * other connected models within the simulation environment.
    */
-  public static Port<Customer> generatorOutputPort = new Port<>("OUTPUT");
+  public static ImmutablePort<ImmutableCustomer> generatorOutputPort = new ImmutablePort<ImmutableCustomer>("OUTPUT", ImmutableCustomer.class);
 
   /**
    * Constructs a CustomerGenerator with the given model state.
@@ -125,7 +126,7 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
     List<Customer> customers = modelState.firstEntry().getValue();
     Bag.Builder builder = Bag.builder();
     for (Customer customer : customers) {
-      builder.addPortValueList(generatorOutputPort.createPortValue(customer));
+      builder.addPortValueList(generatorOutputPort.createPortValue(customer.toImmutable()));
     }
     return builder.build();
   }

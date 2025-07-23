@@ -71,7 +71,7 @@ class CustomerGeneratorTest {
 
     // Get first customer
     Bag output1 = customerGenerator.outputFunction();
-    Customer customer1 = CustomerGenerator.generatorOutputPort
+    ImmutableCustomer customer1 = CustomerGenerator.generatorOutputPort
         .getValue(output1.getPortValueList().get(0));
     assertEquals(1.0, customer1.getTenter(), 0.01);
     assertEquals(1.0, customer1.getTwait(), 0.01);
@@ -85,7 +85,7 @@ class CustomerGeneratorTest {
 
     // Get first customer
     Bag output2 = customerGenerator.outputFunction();
-    Customer customer2 = CustomerGenerator.generatorOutputPort
+    ImmutableCustomer customer2 = CustomerGenerator.generatorOutputPort
         .getValue(output2.getPortValueList().get(0));
     assertEquals(2.0, customer2.getTenter(), 0.01);
     assertEquals(4.0, customer2.getTwait(), 0.01);

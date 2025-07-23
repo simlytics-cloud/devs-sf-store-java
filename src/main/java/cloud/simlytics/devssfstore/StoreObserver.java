@@ -19,6 +19,7 @@ import devs.PDEVSModel;
 import devs.Port;
 import devs.msg.Bag;
 import devs.msg.PortValue;
+import devs.msg.mutability.ImmutablePort;
 import devs.msg.time.DoubleSimTime;
 
 /**
@@ -35,7 +36,7 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * port is used to handle incoming data related to customer activities, such as their departure
    * times and waiting periods, within the simulation.
    */
-  public static Port<ImmutableCustomer> observerInputPort = new Port<>("INPUT");
+  public static ImmutablePort<ImmutableCustomer> observerInputPort = new ImmutablePort<>("INPUT", ImmutableCustomer.class);
 
   /**
    * Constructs a StoreObserver model used to monitor customer behaviors. This model observes

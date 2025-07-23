@@ -66,7 +66,7 @@ public class CustomerTest {
 
     Customer customer2 = objectMapper.readValue(customer1Json, Customer.class);
 
-    PortValue<ICustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
+    PortValue<ImmutableCustomer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
     Bag inputBag = Bag.builder().addPortValueList(pv).build();
     ExecuteTransition<?> executeTransition = ExecuteTransition.builder()
         .time(LongSimTime.builder().t(0L).build())

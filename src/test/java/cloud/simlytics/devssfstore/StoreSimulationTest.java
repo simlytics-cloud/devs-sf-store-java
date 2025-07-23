@@ -142,7 +142,7 @@ public class StoreSimulationTest {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = testKit.spawn(PDevsCoordinator.create(
-            "storeCoordinator", "root", modelSimulators, storeCouplings),
+            "storeCoordinator", modelSimulators, storeCouplings),
         "storeCoordinator");
 
     ActorRef<DevsMessage> rootCoordinator = testKit.spawn(Behaviors.setup(context ->

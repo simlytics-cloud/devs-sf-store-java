@@ -48,14 +48,14 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * the clerk. - The model's external state transition processes customers arriving through this
    * port.
    */
-  public static ImmutablePort<ICustomer> clerkInputPort = new ImmutablePort<>("arrive");
+  public static ImmutablePort<ImmutableCustomer> clerkInputPort = new ImmutablePort<ImmutableCustomer>("arrive", ImmutableCustomer.class);
 
   /**
    * Represents the output port for the ClerkModel, used to send Customer entities when they are
    * done being processed. This port is associated with the "depart" event and is configured to
    * handle Customer objects.
    */
-  public static Port<ImmutableCustomer> clerkOutputPort = new Port<>("depart");
+  public static ImmutablePort<ImmutableCustomer> clerkOutputPort = new ImmutablePort<>("depart", ImmutableCustomer.class);
 
   /**
    * Creates a new instance of the ClerkModel with the specified model identifier.
@@ -110,7 +110,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
   @Override
   public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
     for (PortValue<?> pv : bag.getPortValueList()) {
-      Customer customer = (Customer)clerkInputPort.getValue(pv);
+      Customer customer = clerkInputPort.getValue(pv).toMutable();
       modelState.add(customer);
       if (modelState.size() == 1) { // If this is the first customer, start serving
         serveNextCustomer(doubleSimTime);
