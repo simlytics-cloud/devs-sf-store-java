@@ -16,11 +16,13 @@
 package cloud.simlytics.devssfstore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devs.msg.Bag;
-import devs.msg.DevsMessage;
-import devs.msg.ExecuteTransition;
-import devs.msg.PortValue;
-import devs.msg.time.LongSimTime;
+import devs.iso.DevsMessage;
+import devs.iso.DevsSimMessage;
+import devs.iso.ExecuteTransition;
+import devs.iso.ExecuteTransitionPayload;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
+import devs.iso.time.LongSimTime;
 import devs.utils.DevsObjectMapper;
 import java.io.IOException;
 import org.junit.jupiter.api.DisplayName;
@@ -64,21 +66,25 @@ public class CustomerTest {
     System.out.println(customer1Json);
 
     PortValue<Customer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
-    Bag inputBag = Bag.builder().addPortValueList(pv).build();
-    ExecuteTransition<?> executeTransition = ExecuteTransition.builder()
-        .time(LongSimTime.builder().t(0L).build())
-        .modelInputsOption(inputBag)
+    ExecuteTransition<DoubleSimTime> executeTransition = ExecuteTransition.<DoubleSimTime>builder()
+        .eventTime(DoubleSimTime.create(0.0))
+        .payload(ExecuteTransitionPayload.builder()
+            .modelId("clerk")
+            .addInputs(pv)
+            .build())
+        .simulationId("CustomerTest")
+        .messageId("ExecuteTransition")
+        .senderId("Test")
         .build();
 
     String executeTransitionJson2 = objectMapper.writeValueAsString(executeTransition);
     System.out.println(executeTransitionJson2);
 
-    DevsMessage devsMessage = objectMapper.readValue(executeTransitionJson2, DevsMessage.class);
+    DevsSimMessage devsMessage = objectMapper.readValue(executeTransitionJson2, DevsSimMessage.class);
     assert devsMessage instanceof ExecuteTransition;
     ExecuteTransition<LongSimTime> executeTransitionDes = (ExecuteTransition<LongSimTime>)
         devsMessage;
-    PortValue<?> pvDes = executeTransitionDes.getModelInputsOption().get().getPortValueList()
-        .get(0);
+    PortValue<?> pvDes = executeTransitionDes.getPayload().getInputs().get(0);
     assert pvDes.getValue() instanceof Customer;
 
   }

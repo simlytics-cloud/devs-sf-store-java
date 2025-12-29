@@ -17,9 +17,10 @@ package cloud.simlytics.devssfstore;
 
 import devs.PDEVSModel;
 import devs.Port;
-import devs.msg.Bag;
-import devs.msg.PortValue;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * StoreObserver is a specialized PDEVS model used to monitor the behavior of customers within a
@@ -58,12 +59,12 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * duration of customers.
    *
    * @param doubleSimTime The simulation time at which this external event occurs.
-   * @param bag           The collection of port values containing data input for the current
+   * @param inputs        The collection of port values containing data input for the current
    *                      event.
    */
   @Override
-  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
-    for (PortValue<?> pv : bag.getPortValueList()) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+    for (PortValue<?> pv : inputs) {
       Customer customer = observerInputPort.getValue(pv);
       System.out.println("Customer leaving at " + doubleSimTime.getT()
           + " after a wait of " + customer.getTwait());
@@ -71,8 +72,8 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
   }
 
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
-    externalStateTransitionFunction(doubleSimTime, bag);
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+    externalStateTransitionFunction(doubleSimTime, inputs);
   }
 
   /**
@@ -95,7 +96,7 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * @return A Bag object containing the output data, which is empty in this implementation.
    */
   @Override
-  public Bag outputFunction() {
-    return Bag.builder().build();
+  public List<PortValue<?>> outputFunction() {
+    return Collections.emptyList();
   }
 }

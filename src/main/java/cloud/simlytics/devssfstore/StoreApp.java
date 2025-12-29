@@ -22,9 +22,10 @@ import devs.PDevsCoordinator;
 import devs.PDevsCouplings;
 import devs.PDevsSimulator;
 import devs.RootCoordinator;
-import devs.msg.DevsMessage;
-import devs.msg.InitSim;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.DevsMessage;
+import devs.iso.ModelIdPayload;
+import devs.iso.SimulationInit;
+import devs.iso.time.DoubleSimTime;
 import devs.proxy.KafkaDevsStreamProxy;
 import devs.proxy.KafkaReceiver;
 import devs.utils.ConfigUtils;
@@ -71,8 +72,10 @@ import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
  */
 public class StoreApp extends AbstractBehavior<StoreAppMessage> {
 
-  private static final String clerkInputTopic = "clerk1";
-  private static final String storeCoordinatorInputTopic = "storeCoordinator";
+  private static final String simulationId = "BusyMartSimulation";
+  private static final String clerkInputTopic = simulationId + "-Clerk1";
+  private static final String storeCoordinatorInputTopic = simulationId + "-StoreCoordinator";
+
 
   /**
    * Configuration for connecting to a Kafka cluster. This static private field holds the necessary
@@ -168,14 +171,14 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     kafkaConsumerConfig = config.getConfig("kafka-readall-consumer");
     Properties kafkaClusterProperties = ConfigUtils.toProperties(kafkaClusterConfig);
     AdminClient adminClient = KafkaUtils.createAdminClient(kafkaClusterProperties);
-    KafkaUtils.deleteTopics(
-        Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
+    //KafkaUtils.deleteTopics(
+        //Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
     Thread.sleep(5000);
 
     // Note that the Kafka Topics created must have only 1 partition in order to guaranty messages
     //   are consumed in the same order they are published.
-    KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
-        adminClient, Optional.of(1), Optional.empty());
+    //KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
+        //adminClient, Optional.of(1), Optional.empty());
 
     org.apache.pekko.actor.typed.ActorSystem<StoreAppMessage> system =
         org.apache.pekko.actor.typed.ActorSystem.create(StoreApp.create(), "StoreApp");
@@ -318,7 +321,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = getContext().spawn(PDevsCoordinator.create(
-            "storeCoordinator", "root", modelSimulators, storeCouplings),
+            "storeCoordinator", modelSimulators, storeCouplings),
         "storeCoordinator");
 
     if (runLocal) {
@@ -326,14 +329,20 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     }
 
     ActorRef<DevsMessage> rootCoordinator = getContext().spawn(RootCoordinator.create(
-        DoubleSimTime.builder().t(50.0).build(), storeCoordinator), "rootCoordinator");
+        DoubleSimTime.builder().t(50.0).build(), storeCoordinator, "storeCoordinator"), "rootCoordinator");
 
     ActorRef<DevsMessage> storeCoordinatorReceiver = getContext().spawn(
         KafkaReceiver.create(storeCoordinator, rootCoordinator, kafkaConsumerConfig,
             storeCoordinatorInputTopic), "storeCoordinatorReceiver");
 
     getContext().watch(rootCoordinator);
-    rootCoordinator.tell(InitSim.builder().time(DoubleSimTime.builder().t(0.0).build()).build());
+    rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
+        .eventTime(DoubleSimTime.create(0.0))
+        .payload(ModelIdPayload.builder().modelId("root").build())
+        .simulationId(simulationId)
+        .messageId(java.util.UUID.randomUUID().toString())
+        .senderId("StoreApp")
+        .build());
     return Behaviors.same();
   }
 

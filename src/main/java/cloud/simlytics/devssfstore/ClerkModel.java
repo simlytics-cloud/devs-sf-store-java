@@ -17,9 +17,8 @@ package cloud.simlytics.devssfstore;
 
 import devs.PDEVSModel;
 import devs.Port;
-import devs.msg.Bag;
-import devs.msg.PortValue;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,12 +102,12 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    *
    * @param doubleSimTime the current simulation time used to process the external state
    *                      transition.
-   * @param bag           the collection of input port values received, containing data from
+   * @param inputs        the collection of input port values received, containing data from
    *                      external sources.
    */
   @Override
-  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
-    for (PortValue<?> pv : bag.getPortValueList()) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+    for (PortValue<?> pv : inputs) {
       Customer customer = clerkInputPort.getValue(pv);
       modelState.add(customer);
       if (modelState.size() == 1) { // If this is the first customer, start serving
@@ -126,13 +125,13 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    *
    * @param doubleSimTime the current simulation time used to process the confluent state
    *                      transition.
-   * @param bag           the collection of input port values received, containing data from
+   * @param inputs        the collection of input port values received, containing data from
    *                      external sources.
    */
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
     internalStateTransitionFunction(doubleSimTime);
-    externalStateTransitionFunction(doubleSimTime, bag);
+    externalStateTransitionFunction(doubleSimTime, inputs);
   }
 
   /**
@@ -166,8 +165,8 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * forwarded through the output port
    */
   @Override
-  public Bag outputFunction() {
+  public List<PortValue<?>> outputFunction() {
     Customer exitingCustomer = modelState.get(0);
-    return Bag.builder().addPortValueList(clerkOutputPort.createPortValue(exitingCustomer)).build();
+    return List.of(clerkOutputPort.createPortValue(exitingCustomer));
   }
 }

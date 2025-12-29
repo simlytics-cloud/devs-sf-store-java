@@ -17,8 +17,8 @@ package cloud.simlytics.devssfstore;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import devs.msg.Bag;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
@@ -70,9 +70,9 @@ class CustomerGeneratorTest {
     assert t1.getT() == 1;
 
     // Get first customer
-    Bag output1 = customerGenerator.outputFunction();
+    List<PortValue<?>> output1 = customerGenerator.outputFunction();
     Customer customer1 = CustomerGenerator.generatorOutputPort
-        .getValue(output1.getPortValueList().get(0));
+        .getValue(output1.get(0));
     assertEquals(1.0, customer1.getTenter(), 0.01);
     assertEquals(1.0, customer1.getTwait(), 0.01);
 
@@ -84,9 +84,9 @@ class CustomerGeneratorTest {
     assert t2.getT() == 1;
 
     // Get first customer
-    Bag output2 = customerGenerator.outputFunction();
+    List<PortValue<?>> output2 = customerGenerator.outputFunction();
     Customer customer2 = CustomerGenerator.generatorOutputPort
-        .getValue(output2.getPortValueList().get(0));
+        .getValue(output2.get(0));
     assertEquals(2.0, customer2.getTenter(), 0.01);
     assertEquals(4.0, customer2.getTwait(), 0.01);
   }

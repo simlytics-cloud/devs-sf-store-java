@@ -50,8 +50,9 @@ import org.junit.jupiter.api.Test;
  */
 public class DeleteCreateTopicsTest {
 
-  private static final String clerkInputTopic = "clerk1";
-  private static final String storeCoordinatorInputTopic = "storeCoordinator";
+  private static final String simulationId = "BusyMartSimulation";
+  private static final String clerkInputTopic = simulationId + "-Clerk1";
+  private static final String storeCoordinatorInputTopic = simulationId + "-StoreCoordinator";
 
   /**
    * Deletes and re-creates specified Kafka topics for testing purposes.
@@ -78,7 +79,7 @@ public class DeleteCreateTopicsTest {
    * @throws InterruptedException if the thread sleep is interrupted.
    * @throws ExecutionException   if an error occurs during Kafka Admin operations.
    */
-  @Disabled("Requires Kafka connection")
+  //@Disabled("Requires Kafka connection")
   @Test
   @DisplayName("Delete and create topics")
   void deleteAndCreateTopics() throws InterruptedException, ExecutionException {

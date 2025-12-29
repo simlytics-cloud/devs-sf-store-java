@@ -19,9 +19,10 @@ import devs.PDevsCoordinator;
 import devs.PDevsCouplings;
 import devs.PDevsSimulator;
 import devs.RootCoordinator;
-import devs.msg.DevsMessage;
-import devs.msg.InitSim;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.DevsMessage;
+import devs.iso.ModelIdPayload;
+import devs.iso.SimulationInit;
+import devs.iso.time.DoubleSimTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -142,12 +143,19 @@ public class StoreSimulationTest {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = testKit.spawn(PDevsCoordinator.create(
-            "storeCoordinator", "root", modelSimulators, storeCouplings),
+            "storeCoordinator", modelSimulators, storeCouplings),
         "storeCoordinator");
 
     ActorRef<DevsMessage> rootCoordinator = testKit.spawn(Behaviors.setup(context ->
-        new RootCoordinator<>(context, DoubleSimTime.builder().t(8.0).build(), storeCoordinator)));
-    rootCoordinator.tell(InitSim.builder().time(DoubleSimTime.builder().t(0.0).build()).build());
+        new RootCoordinator<>(context, DoubleSimTime.builder().t(8.0).build(), storeCoordinator,
+            "storeCoordinator")));
+    rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
+        .eventTime(DoubleSimTime.create(0.0))
+        .payload(ModelIdPayload.builder().modelId("root").build())
+        .simulationId("StoreSimulationTest")
+        .messageId("SimulationInit")
+        .senderId("TestActor")
+        .build());
 
     Thread.sleep(2000L);
   }

@@ -17,8 +17,9 @@ package cloud.simlytics.devssfstore;
 
 import devs.PDEVSModel;
 import devs.Port;
-import devs.msg.Bag;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -84,12 +85,12 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
   }
 
   @Override
-  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
 
   }
 
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, Bag bag) {
+  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
 
   }
 
@@ -121,12 +122,12 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
    * of the model state.
    */
   @Override
-  public Bag outputFunction() {
+  public List<PortValue<?>> outputFunction() {
     List<Customer> customers = modelState.firstEntry().getValue();
-    Bag.Builder builder = Bag.builder();
+    List<PortValue<?>> portValues = new ArrayList<>();
     for (Customer customer : customers) {
-      builder.addPortValueList(generatorOutputPort.createPortValue(customer));
+      portValues.add(generatorOutputPort.createPortValue(customer));
     }
-    return builder.build();
+    return portValues;
   }
 }
