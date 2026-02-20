@@ -15,10 +15,12 @@
 
 package cloud.simlytics.devssfstore;
 
+import cloud.simlytics.devssfstore.StoreApp.ModelStructure;
 import devs.PDEVSModel;
 import devs.Port;
 import devs.iso.PortValue;
 import devs.iso.time.DoubleSimTime;
+import devs.msg.state.TimeState;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,9 +29,8 @@ import java.util.List;
  * simulation. It observes and records customer departure times and their respective waiting times.
  * This model performs state transitions and manages incoming data related to customer actions.
  */
-public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
+public class StoreObserver extends PDEVSModel<DoubleSimTime, TimeState<DoubleSimTime>> {
 
-  public static String modelIdentifier = "customerObserver";
 
   /**
    * Represents an input port for receiving `Customer` objects in the `StoreObserver` model. This
@@ -45,12 +46,12 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * @param modelState The initial state of the model, representing a `Void` state in this context.
    */
   public StoreObserver(Void modelState) {
-    super(modelState, modelIdentifier);
+    super(new TimeState<>(DoubleSimTime.create(0.0)), ModelStructure.storeObserver);
   }
 
   @Override
-  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
-
+  public void internalStateTransitionFunction() {
+    throw new IllegalStateException("Internal state transition not supported for StoreObserver");
   }
 
   /**
@@ -58,22 +59,24 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * processes input data received through the input port, determining the departure time and wait
    * duration of customers.
    *
-   * @param doubleSimTime The simulation time at which this external event occurs.
+   * @param elapsedTime The simulation time at which this external event occurs.
    * @param inputs        The collection of port values containing data input for the current
    *                      event.
    */
   @Override
-  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+  public void externalStateTransitionFunction(DoubleSimTime elapsedTime, List<PortValue<?>> inputs) {
+    DoubleSimTime currentTime = modelState.getCurrentTime().plus(elapsedTime);
+    modelState.setCurrentTime(currentTime);
     for (PortValue<?> pv : inputs) {
       Customer customer = observerInputPort.getValue(pv);
-      System.out.println("Customer leaving at " + doubleSimTime.getT()
+      System.out.println("Customer leaving at " + currentTime.getT()
           + " after a wait of " + customer.getTwait());
     }
   }
 
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
-    externalStateTransitionFunction(doubleSimTime, inputs);
+  public void confluentStateTransitionFunction(List<PortValue<?>> inputs) {
+    throw new IllegalStateException("Confluent state transition not supported for StoreObserver");
   }
 
   /**
@@ -81,12 +84,11 @@ public class StoreObserver extends PDEVSModel<DoubleSimTime, Void> {
    * method computes the time difference between the current simulation time and a predetermined
    * value.
    *
-   * @param doubleSimTime The current simulation time as a DoubleSimTime object.
    * @return A DoubleSimTime object representing the time until the next internal event.
    */
   @Override
-  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
-    return (DoubleSimTime) DoubleSimTime.builder().t(Double.MAX_VALUE).build().minus(doubleSimTime);
+  public DoubleSimTime timeAdvanceFunction() {
+    return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
   }
 
   /**

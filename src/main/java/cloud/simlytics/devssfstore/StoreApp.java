@@ -16,20 +16,23 @@
 package cloud.simlytics.devssfstore;
 
 import cloud.simlytics.devssfstore.StoreApp.StoreAppMessage;
+import cloud.simlytics.devssfstore.StoreApp.ModelStructure;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import devs.PDevsCoordinator;
 import devs.PDevsCouplings;
+import devs.PDevsCouplings.Connection;
 import devs.PDevsSimulator;
 import devs.RootCoordinator;
 import devs.iso.DevsMessage;
-import devs.iso.ModelIdPayload;
 import devs.iso.SimulationInit;
 import devs.iso.time.DoubleSimTime;
+import devs.iso.time.LongSimTime;
 import devs.proxy.KafkaDevsStreamProxy;
 import devs.proxy.KafkaReceiver;
 import devs.utils.ConfigUtils;
 import devs.utils.KafkaUtils;
+import devs.utils.Schedule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,8 +76,14 @@ import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
 public class StoreApp extends AbstractBehavior<StoreAppMessage> {
 
   private static final String simulationId = "BusyMartSimulation";
-  private static final String clerkInputTopic = simulationId + "-Clerk1";
-  private static final String storeCoordinatorInputTopic = simulationId + "-StoreCoordinator";
+  private static final String clerkInputTopic = simulationId + "-Store";
+  private static final String storeCoordinatorInputTopic = simulationId + "-Store";
+
+  public static final class ModelStructure {
+    public static final String customerGenerator = "customerGenerator";
+    public static final String clerk = "clerk1";
+    public static final String storeObserver = "storeObserver";
+  }
 
 
   /**
@@ -261,7 +270,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
                 kafkaClusterConfig), "storeCoordinatorProxy");
 
     ActorRef<DevsMessage> clerk1Receiver = getContext().spawn(
-        KafkaReceiver.create(clerk1Simulator, coordinatorProxy, kafkaConsumerConfig,
+        KafkaReceiver.create(clerk1Simulator, coordinatorProxy, "clerk1", kafkaConsumerConfig,
             clerkInputTopic), "clerk1Receiver");
   }
 
@@ -282,25 +291,26 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
    * after processing the startup message.
    */
   protected Behavior<StoreAppMessage> onStart(StoreStart start) {
-    TreeMap<Double, List<Customer>> customerSchedule = new TreeMap<>();
-    customerSchedule.put(1.0, Collections.singletonList(
-        Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build()));
-    customerSchedule.put(2.0, Collections.singletonList(
-        Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build()));
-    customerSchedule.put(3.0, Collections.singletonList(
-        Customer.builder().twait(4.0).tenter(3.0).tleave(0.0).build()));
-    customerSchedule.put(5.0, Collections.singletonList(
-        Customer.builder().twait(2.0).tenter(5.0).tleave(0.0).build()));
-    customerSchedule.put(7.0, Collections.singletonList(
-        Customer.builder().twait(10.0).tenter(7.0).tleave(0.0).build()));
-    customerSchedule.put(8.0, Collections.singletonList(
-        Customer.builder().twait(20.0).tenter(8.0).tleave(0.0).build()));
-    customerSchedule.put(10.0, Collections.singletonList(
-        Customer.builder().twait(2.0).tenter(10.0).tleave(0.0).build()));
-    customerSchedule.put(11.0, Collections.singletonList(
-        Customer.builder().twait(1.0).tenter(11.0).tleave(0.0).build()));
+    Schedule<DoubleSimTime> customerSchedule = new Schedule<>();
+
+    customerSchedule.scheduleOutput(DoubleSimTime.create(1.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(2.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(3.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(4.0).tenter(3.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(5.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(2.0).tenter(5.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(7.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(10.0).tenter(7.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(8.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(20.0).tenter(8.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(10.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(2.0).tenter(10.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(11.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(1.0).tenter(11.0).tleave(0.0).build());
     DoubleSimTime t0 = DoubleSimTime.builder().t(0.0).build();
-    CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule);
+    CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule, StoreApp.ModelStructure.customerGenerator);
     ActorRef<DevsMessage> customerSimulator =
         getContext().spawn(PDevsSimulator.create(customerGenerator, t0), "customerGenerator");
 
@@ -312,8 +322,12 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     ActorRef<DevsMessage> storeObserverSimulator =
         getContext().spawn(PDevsSimulator.create(storeObserver, t0), "storeObserver");
 
-    PDevsCouplings storeCouplings = new PDevsCouplings(Collections.emptyList(),
-        Collections.singletonList(new StoreCouplingHandler()));
+    PDevsCouplings storeCouplings = PDevsCouplings.builder()
+        .addConnection(ModelStructure.clerk, ClerkModel.clerkOutputPort.getPortName(),
+            ModelStructure.storeObserver, StoreObserver.observerInputPort.getPortName())
+        .addConnection(ModelStructure.customerGenerator, CustomerGenerator.generatorOutputPort.getPortName(),
+            ModelStructure.clerk, ClerkModel.clerkInputPort.getPortName())
+        .build();
 
     Map<String, ActorRef<DevsMessage>> modelSimulators = new HashMap<>();
     modelSimulators.put(customerGenerator.getModelIdentifier(), customerSimulator);
@@ -332,16 +346,16 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
         DoubleSimTime.builder().t(50.0).build(), storeCoordinator, "storeCoordinator"), "rootCoordinator");
 
     ActorRef<DevsMessage> storeCoordinatorReceiver = getContext().spawn(
-        KafkaReceiver.create(storeCoordinator, rootCoordinator, kafkaConsumerConfig,
+        KafkaReceiver.create(storeCoordinator, rootCoordinator, "storeCoordinator" ,kafkaConsumerConfig,
             storeCoordinatorInputTopic), "storeCoordinatorReceiver");
 
     getContext().watch(rootCoordinator);
     rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
         .eventTime(DoubleSimTime.create(0.0))
-        .payload(ModelIdPayload.builder().modelId("root").build())
         .simulationId(simulationId)
         .messageId(java.util.UUID.randomUUID().toString())
         .senderId("StoreApp")
+        .receiverId("root")
         .build());
     return Behaviors.same();
   }

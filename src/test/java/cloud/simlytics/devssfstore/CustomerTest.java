@@ -69,12 +69,12 @@ public class CustomerTest {
     ExecuteTransition<DoubleSimTime> executeTransition = ExecuteTransition.<DoubleSimTime>builder()
         .eventTime(DoubleSimTime.create(0.0))
         .payload(ExecuteTransitionPayload.builder()
-            .modelId("clerk")
             .addInputs(pv)
             .build())
         .simulationId("CustomerTest")
         .messageId("ExecuteTransition")
         .senderId("Test")
+        .receiverId("clerk1")
         .build();
 
     String executeTransitionJson2 = objectMapper.writeValueAsString(executeTransition);

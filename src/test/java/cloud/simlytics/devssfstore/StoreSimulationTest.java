@@ -15,22 +15,33 @@
 
 package cloud.simlytics.devssfstore;
 
+import cloud.simlytics.devssfstore.StoreApp.ModelStructure;
+import cloud.simlytics.devssfstore.StoreApp.StoreAppMessage;
+import cloud.simlytics.devssfstore.StoreApp.StoreStart;
 import devs.PDevsCoordinator;
 import devs.PDevsCouplings;
 import devs.PDevsSimulator;
 import devs.RootCoordinator;
 import devs.iso.DevsMessage;
-import devs.iso.ModelIdPayload;
 import devs.iso.SimulationInit;
 import devs.iso.time.DoubleSimTime;
+import devs.utils.Schedule;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import org.apache.pekko.actor.testkit.typed.javadsl.ActorTestKit;
+import org.apache.pekko.actor.testkit.typed.javadsl.TestProbe;
 import org.apache.pekko.actor.typed.ActorRef;
+import org.apache.pekko.actor.typed.Behavior;
+import org.apache.pekko.actor.typed.Terminated;
+import org.apache.pekko.actor.typed.javadsl.AbstractBehavior;
+import org.apache.pekko.actor.typed.javadsl.ActorContext;
 import org.apache.pekko.actor.typed.javadsl.Behaviors;
+import org.apache.pekko.actor.typed.javadsl.Receive;
+import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,7 +90,94 @@ public class StoreSimulationTest {
     testKit.shutdownTestKit();
   }
 
-  private final TreeMap<Double, List<Customer>> customerSchedule = new TreeMap<>();
+  static class SimulationTestApp extends AbstractBehavior<StoreApp.StoreAppMessage> {
+
+    public static Behavior<StoreApp.StoreAppMessage> create() {
+      return Behaviors.setup(SimulationTestApp::new);
+    }
+
+    protected SimulationTestApp(ActorContext<StoreAppMessage> context) {
+      super(context);
+    }
+
+    public Receive<StoreAppMessage> createReceive() {
+      ReceiveBuilder<StoreAppMessage> storeAppReceiveBuilder = newReceiveBuilder();
+      storeAppReceiveBuilder.onMessage(StoreStart.class, this::onStart);
+      storeAppReceiveBuilder.onSignal(Terminated.class, this::onTerminated);
+      return storeAppReceiveBuilder.build();
+    }
+
+    protected Behavior<StoreAppMessage> onStart(StoreApp.StoreStart start) {
+      Schedule<DoubleSimTime> customerSchedule = new Schedule<>();
+      customerSchedule.scheduleOutput(DoubleSimTime.create(1.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(2.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(3.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(4.0).tenter(3.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(5.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(2.0).tenter(5.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(7.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(10.0).tenter(7.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(8.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(20.0).tenter(8.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(10.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(2.0).tenter(10.0).tleave(0.0).build());
+      customerSchedule.scheduleOutput(DoubleSimTime.create(11.0), CustomerGenerator.generatorOutputPort,
+          Customer.builder().twait(1.0).tenter(11.0).tleave(0.0).build());
+
+      DoubleSimTime t0 = DoubleSimTime.builder().t(0.0).build();
+      CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule, StoreApp.ModelStructure.customerGenerator);
+      ActorRef<DevsMessage> customerSimulator =
+          testKit.spawn(PDevsSimulator.create(customerGenerator, t0), "customerGenerator");
+
+      ClerkModel clerkModel = new ClerkModel("clerk1");
+      ActorRef<DevsMessage> clerk1Simulator = testKit.spawn(
+          PDevsSimulator.create(clerkModel, t0), "clerk1Simulator");
+
+      StoreObserver storeObserver = new StoreObserver(null);
+      ActorRef<DevsMessage> storeObserverSimulator =
+          testKit.spawn(PDevsSimulator.create(storeObserver, t0), "storeObserver");
+
+      PDevsCouplings storeCouplings = PDevsCouplings.builder()
+          .addConnection(ModelStructure.clerk, ClerkModel.clerkOutputPort.getPortName(),
+              ModelStructure.storeObserver, StoreObserver.observerInputPort.getPortName())
+          .addConnection(ModelStructure.customerGenerator, CustomerGenerator.generatorOutputPort.getPortName(),
+              ModelStructure.clerk, ClerkModel.clerkInputPort.getPortName())
+          .build();
+
+      Map<String, ActorRef<DevsMessage>> modelSimulators = new HashMap<>();
+      modelSimulators.put(customerGenerator.getModelIdentifier(), customerSimulator);
+      modelSimulators.put(clerkModel.getModelIdentifier(), clerk1Simulator);
+      modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
+
+      ActorRef<DevsMessage> storeCoordinator = testKit.spawn(PDevsCoordinator.create(
+              "storeCoordinator", modelSimulators, storeCouplings),
+          "storeCoordinator");
+
+      TestProbe<Object> probe = testKit.createTestProbe();
+
+      ActorRef<DevsMessage> rootCoordinator = testKit.spawn(Behaviors.setup(context ->
+          new RootCoordinator<>(context, DoubleSimTime.builder().t(50.0).build(), storeCoordinator,
+              "storeCoordinator")));
+      getContext().watch(rootCoordinator);
+
+      rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
+          .eventTime(DoubleSimTime.create(0.0))
+          .simulationId("StoreSimulationTest")
+          .messageId("SimulationInit")
+          .senderId("TestActor")
+          .receiverId("root")
+          .build());
+
+      return Behaviors.same();
+    }
+
+    protected Behavior<StoreAppMessage> onTerminated(Terminated signal) throws InterruptedException {
+      return Behaviors.stopped();
+    }
+  }
+
 
   /**
    * Default constructor for the StoreSimulationTest class.
@@ -89,10 +187,8 @@ public class StoreSimulationTest {
    * Customer objects representing customer behavior at that given time.
    */
   StoreSimulationTest() {
-    customerSchedule.put(1.0, Collections.singletonList(
-        Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build()));
-    customerSchedule.put(2.0, Collections.singletonList(
-        Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build()));
+
+
   }
 
   /**
@@ -121,43 +217,12 @@ public class StoreSimulationTest {
   @DisplayName("Test store simulation")
   void testStoreSim() throws InterruptedException {
 
-    DoubleSimTime t0 = DoubleSimTime.builder().t(0.0).build();
-    CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule);
-    ActorRef<DevsMessage> customerSimulator =
-        testKit.spawn(PDevsSimulator.create(customerGenerator, t0), "customerGenerator");
+    ActorRef<StoreAppMessage> simulationTestApp =
+        testKit.spawn(SimulationTestApp.create(), "SimulationTestApp");
+    simulationTestApp.tell(new StoreStart());
 
-    ClerkModel clerkModel = new ClerkModel("clerk1");
-    ActorRef<DevsMessage> clerk1Simulator = testKit.spawn(
-        PDevsSimulator.create(clerkModel, t0), "clerk1Simulator");
-
-    StoreObserver storeObserver = new StoreObserver(null);
-    ActorRef<DevsMessage> storeObserverSimulator =
-        testKit.spawn(PDevsSimulator.create(storeObserver, t0), "storeObserver");
-
-    PDevsCouplings storeCouplings = new PDevsCouplings(Collections.emptyList(),
-        Collections.singletonList(new StoreCouplingHandler()));
-
-    Map<String, ActorRef<DevsMessage>> modelSimulators = new HashMap<>();
-    modelSimulators.put(customerGenerator.getModelIdentifier(), customerSimulator);
-    modelSimulators.put(clerkModel.getModelIdentifier(), clerk1Simulator);
-    modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
-
-    ActorRef<DevsMessage> storeCoordinator = testKit.spawn(PDevsCoordinator.create(
-            "storeCoordinator", modelSimulators, storeCouplings),
-        "storeCoordinator");
-
-    ActorRef<DevsMessage> rootCoordinator = testKit.spawn(Behaviors.setup(context ->
-        new RootCoordinator<>(context, DoubleSimTime.builder().t(8.0).build(), storeCoordinator,
-            "storeCoordinator")));
-    rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
-        .eventTime(DoubleSimTime.create(0.0))
-        .payload(ModelIdPayload.builder().modelId("root").build())
-        .simulationId("StoreSimulationTest")
-        .messageId("SimulationInit")
-        .senderId("TestActor")
-        .build());
-
-    Thread.sleep(2000L);
+    TestProbe<Terminated> probe = testKit.createTestProbe();
+    probe.expectTerminated(simulationTestApp, Duration.ofSeconds(1000));
   }
 
 }

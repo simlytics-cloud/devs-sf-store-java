@@ -17,8 +17,12 @@ package cloud.simlytics.devssfstore;
 
 import devs.PDEVSModel;
 import devs.Port;
+import devs.experimentalframe.Generator;
 import devs.iso.PortValue;
 import devs.iso.time.DoubleSimTime;
+import devs.msg.state.ScheduleState;
+import devs.utils.Schedule;
+import devs.utils.Schedule.ScheduledEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -38,7 +42,7 @@ import java.util.TreeMap;
  * The model defines one static output port, `generatorOutputPort`, for transmitting generated
  * customers.
  */
-public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double, List<Customer>>> {
+public class CustomerGenerator extends Generator<DoubleSimTime> {
 
   /**
    * Represents the unique identifier for the model.
@@ -46,7 +50,6 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
    * In the context of the CustomerGenerator class, the identifier serves as a distinguishing label
    * for the customer generation model.
    */
-  public static String modelIdentifier = "customerGenerator";
 
   /**
    * A static output port used to transmit generated customers from the CustomerGenerator model.
@@ -63,25 +66,15 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
   /**
    * Constructs a CustomerGenerator with the given model state.
    *
-   * @param modelState a TreeMap representing the model state, where the keys are Double values and
-   *                   the values are lists of Customer objects.
+   * @param customerSchedule the schedule of customer arrivals
    */
-  public CustomerGenerator(TreeMap<Double, List<Customer>> modelState) {
-    super(modelState, modelIdentifier);
+  public CustomerGenerator(Schedule<DoubleSimTime> customerSchedule, String modelIdentifier) {
+    super(modelIdentifier, new ScheduleState<>(DoubleSimTime.create(0.0), customerSchedule));
   }
 
-  /**
-   * Handles the internal state transition of the model by removing customers at the specified
-   * simulation time. These customers were already sent as output during the output function call.
-   *
-   * @param doubleSimTime the simulation time at which the internal state transition occurs. It can
-   *                      be used to access the specific time value for this operation.
-   */
   @Override
-  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
-    // Remove the customers generated at this time.  They were sent as output during the call to
-    // the output function
-    modelState.remove(doubleSimTime.getT());
+  public void handleScheduledEvents(List<Object> events) {
+    // There are no internal events for this model
   }
 
   @Override
@@ -90,44 +83,26 @@ public class CustomerGenerator extends PDEVSModel<DoubleSimTime, TreeMap<Double,
   }
 
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+  public void confluentStateTransitionFunction(List<PortValue<?>> inputs) {
 
   }
 
   /**
    * Determines the time until the next internal event occurs for the model.
    *
-   * @param doubleSimTime the current simulation time, used to calculate the time advance.
    * @return the time until the model's next internal event. If the model state is empty, returns
    * DoubleSimTime representing a very large value, otherwise calculates the time difference to the
    * simulation time for the first key in the model state.
    */
   @Override
-  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
-    if (modelState.isEmpty()) {
-      return (DoubleSimTime) DoubleSimTime.builder().t(Double.MAX_VALUE).build()
-          .minus(doubleSimTime);
+  public DoubleSimTime timeAdvanceFunction() {
+    if (modelState.getSchedule().isEmpty()) {
+      return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
     } else {
-      return (DoubleSimTime) DoubleSimTime.builder().t(modelState.firstKey()).build()
-          .minus(doubleSimTime);
+      return modelState.getSchedule().getFirstEventTime()
+          .minus(modelState.getCurrentTime());
     }
   }
 
-  /**
-   * Generates the output of the model by retrieving the first entry in the model state, extracting
-   * the associated customers, and creating a Bag of output port values corresponding to these
-   * customers.
-   *
-   * @return a Bag containing the generated output port values for the customers in the first entry
-   * of the model state.
-   */
-  @Override
-  public List<PortValue<?>> outputFunction() {
-    List<Customer> customers = modelState.firstEntry().getValue();
-    List<PortValue<?>> portValues = new ArrayList<>();
-    for (Customer customer : customers) {
-      portValues.add(generatorOutputPort.createPortValue(customer));
-    }
-    return portValues;
-  }
+
 }

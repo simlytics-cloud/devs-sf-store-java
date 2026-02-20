@@ -33,7 +33,7 @@ import java.util.List;
  * The model maintains a state consisting of a list of customers currently at the clerk. Customers
  * are processed in a sequential order based on their arrival time.
  */
-public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
+public class ClerkModel extends PDEVSModel<DoubleSimTime, ClerkState> {
 
   /**
    * Represents the input port of the ClerkModel for receiving arriving customers. This port serves
@@ -61,7 +61,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * @param modelIdentifier the unique identifier of the ClerkModel
    */
   public ClerkModel(String modelIdentifier) {
-    super(new ArrayList<>(), modelIdentifier);
+    super(new ClerkState(DoubleSimTime.create(0.0)), modelIdentifier);
   }
 
   /**
@@ -72,14 +72,16 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * at this time. 2. If there are still customers in the model state, it initiates the serving of
    * the next customer.
    *
-   * @param doubleSimTime the current simulation time used to process the internal state
-   *                      transition.
    */
   @Override
-  public void internalStateTransitionFunction(DoubleSimTime doubleSimTime) {
-    modelState.remove(0);  // remove customer that exits at this time
-    if (!modelState.isEmpty()) {
-      serveNextCustomer(doubleSimTime);
+  public void internalStateTransitionFunction() {
+    DoubleSimTime currentTime = modelState.getCurrentTime().plus(timeAdvanceFunction());
+    modelState.setCurrentTime(currentTime);
+    if (!modelState.getCustomerList().isEmpty()) {
+      modelState.getCustomerList().removeFirst();  // remove customer that exits at this time
+    }
+    if (!modelState.getCustomerList().isEmpty()) {
+      serveNextCustomer(currentTime);
     }
   }
 
@@ -91,27 +93,29 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    */
   private void serveNextCustomer(DoubleSimTime doubleSimTime) {
     // Start serving next customer
-    Customer nextCustomer = modelState.remove(0);
+    Customer nextCustomer = modelState.getCustomerList().remove(0);
     nextCustomer = nextCustomer.withTleave(doubleSimTime.getT() + nextCustomer.getTwait());
-    modelState.add(0, nextCustomer);
+    modelState.getCustomerList().add(0, nextCustomer);
   }
 
   /**
    * Handles the external state transition of the model when external events occur. This function
    * processes input from external sources and updates the model state accordingly.
    *
-   * @param doubleSimTime the current simulation time used to process the external state
+   * @param elapsedTime the current simulation time used to process the external state
    *                      transition.
    * @param inputs        the collection of input port values received, containing data from
    *                      external sources.
    */
   @Override
-  public void externalStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
+  public void externalStateTransitionFunction(DoubleSimTime elapsedTime, List<PortValue<?>> inputs) {
+    DoubleSimTime currentTime = modelState.getCurrentTime().plus(elapsedTime);
+    modelState.setCurrentTime(currentTime);
     for (PortValue<?> pv : inputs) {
       Customer customer = clerkInputPort.getValue(pv);
-      modelState.add(customer);
-      if (modelState.size() == 1) { // If this is the first customer, start serving
-        serveNextCustomer(doubleSimTime);
+      modelState.getCustomerList().add(customer);
+      if (modelState.getCustomerList().size() == 1) { // If this is the first customer, start serving
+        serveNextCustomer(currentTime);
       }
     }
   }
@@ -123,15 +127,13 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * This method combines the execution of the internal state transition function and the external
    * state transition function to address simultaneous events.
    *
-   * @param doubleSimTime the current simulation time used to process the confluent state
-   *                      transition.
    * @param inputs        the collection of input port values received, containing data from
    *                      external sources.
    */
   @Override
-  public void confluentStateTransitionFunction(DoubleSimTime doubleSimTime, List<PortValue<?>> inputs) {
-    internalStateTransitionFunction(doubleSimTime);
-    externalStateTransitionFunction(doubleSimTime, inputs);
+  public void confluentStateTransitionFunction(List<PortValue<?>> inputs) {
+    internalStateTransitionFunction();
+    externalStateTransitionFunction(DoubleSimTime.create(0.0), inputs);
   }
 
   /**
@@ -140,19 +142,17 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    * state is empty, it returns a large time value indicating no immediate events; otherwise, it
    * calculates the time based on the next customer's leave time.
    *
-   * @param doubleSimTime the current simulation time used as a reference for the time-advance
-   *                      calculation
    * @return the remaining simulation time as a {@code DoubleSimTime} object until the next internal
    * event occurs
    */
   @Override
-  public DoubleSimTime timeAdvanceFunction(DoubleSimTime doubleSimTime) {
-    if (modelState.isEmpty()) {
-      return (DoubleSimTime) DoubleSimTime.builder().t(Double.MAX_VALUE).build()
-          .minus(doubleSimTime);
+  public DoubleSimTime timeAdvanceFunction() {
+    if (modelState.getCustomerList().isEmpty()) {
+      return DoubleSimTime.builder().t(Double.MAX_VALUE).build();
     } else {
-      double timeLeave = modelState.get(0).getTleave();
-      return (DoubleSimTime) DoubleSimTime.builder().t(timeLeave).build().minus(doubleSimTime);
+      double leaveTime = modelState.getCustomerList().get(0).getTleave();
+      double timeAdvance = leaveTime - modelState.getCurrentTime().getT();
+      return DoubleSimTime.builder().t(timeAdvance).build();
     }
   }
 
@@ -166,7 +166,7 @@ public class ClerkModel extends PDEVSModel<DoubleSimTime, List<Customer>> {
    */
   @Override
   public List<PortValue<?>> outputFunction() {
-    Customer exitingCustomer = modelState.get(0);
+    Customer exitingCustomer = modelState.getCustomerList().get(0);
     return List.of(clerkOutputPort.createPortValue(exitingCustomer));
   }
 }

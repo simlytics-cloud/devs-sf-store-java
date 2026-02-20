@@ -51,8 +51,7 @@ import org.junit.jupiter.api.Test;
 public class DeleteCreateTopicsTest {
 
   private static final String simulationId = "BusyMartSimulation";
-  private static final String clerkInputTopic = simulationId + "-Clerk1";
-  private static final String storeCoordinatorInputTopic = simulationId + "-StoreCoordinator";
+  private static final String clerkInputTopic = simulationId + "-Store";
 
   /**
    * Deletes and re-creates specified Kafka topics for testing purposes.
@@ -82,15 +81,16 @@ public class DeleteCreateTopicsTest {
   //@Disabled("Requires Kafka connection")
   @Test
   @DisplayName("Delete and create topics")
+  @Disabled("Requires Kafka connection")
   void deleteAndCreateTopics() throws InterruptedException, ExecutionException {
     Config config = ConfigFactory.load();
     Config kafkaClusterConfig = config.getConfig("kafka-cluster");
     Properties kafkaClusterProperties = ConfigUtils.toProperties(kafkaClusterConfig);
     AdminClient adminClient = KafkaUtils.createAdminClient(kafkaClusterProperties);
     KafkaUtils.deleteTopics(
-        Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
+        Arrays.asList(clerkInputTopic), adminClient);
     Thread.sleep(5000);
-    KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
+    KafkaUtils.createTopics(Arrays.asList(clerkInputTopic),
         adminClient, Optional.of(1), Optional.empty());
   }
 }

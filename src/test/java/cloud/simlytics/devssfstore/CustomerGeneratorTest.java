@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import devs.iso.PortValue;
 import devs.iso.time.DoubleSimTime;
+import devs.utils.Schedule;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
@@ -34,13 +35,14 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Test Customer Generator")
 class CustomerGeneratorTest {
 
-  private final TreeMap<Double, List<Customer>> customerSchedule = new TreeMap<>();
+  private final Schedule<DoubleSimTime> customerSchedule = new Schedule<>();
 
   CustomerGeneratorTest() {
-    customerSchedule.put(1.0, Collections.singletonList(
-        Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build()));
-    customerSchedule.put(2.0, Collections.singletonList(
-        Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build()));
+
+    customerSchedule.scheduleOutput(DoubleSimTime.create(1.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build());
+    customerSchedule.scheduleOutput(DoubleSimTime.create(2.0), CustomerGenerator.generatorOutputPort,
+        Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build());
   }
 
 
@@ -62,11 +64,11 @@ class CustomerGeneratorTest {
   @Test
   @DisplayName("Test generation of customers from a table")
   void testCustomerGeneration() {
-    CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule);
+    CustomerGenerator customerGenerator = new CustomerGenerator(customerSchedule, StoreApp.ModelStructure.customerGenerator);
     DoubleSimTime t0 = DoubleSimTime.builder().t(0.0).build();
 
     // First customer out should be at t = 1;
-    DoubleSimTime t1 = customerGenerator.timeAdvanceFunction(t0);
+    DoubleSimTime t1 = customerGenerator.timeAdvanceFunction();
     assert t1.getT() == 1;
 
     // Get first customer
@@ -77,10 +79,10 @@ class CustomerGeneratorTest {
     assertEquals(1.0, customer1.getTwait(), 0.01);
 
     // Execute internal transition at t = 1, removing customer 1 from the list
-    customerGenerator.internalStateTransitionFunction(t1);
+    customerGenerator.internalStateTransitionFunction();
 
     // Next customer should exit at t = 2
-    DoubleSimTime t2 = customerGenerator.timeAdvanceFunction(t1);
+    DoubleSimTime t2 = customerGenerator.timeAdvanceFunction();
     assert t2.getT() == 1;
 
     // Get first customer

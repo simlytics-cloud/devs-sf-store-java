@@ -67,7 +67,7 @@ class ClerkModelTest {
     DoubleSimTime t1 = DoubleSimTime.builder().t(1.0).build();
 
     // next time should be max value
-    assert clerkModel.timeAdvanceFunction(t1).getT() == Double.MAX_VALUE;
+    assert clerkModel.timeAdvanceFunction().getT() == Double.MAX_VALUE;
 
     // Send first customer
     Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
@@ -75,7 +75,7 @@ class ClerkModelTest {
     clerkModel.externalStateTransitionFunction(t1, List.of(pv));
 
     // Next time should be 2
-    DoubleSimTime t = clerkModel.timeAdvanceFunction(t1);
+    DoubleSimTime t = clerkModel.timeAdvanceFunction();
     assertEquals(1.0, t.getT(), 0.01);
 
     // Output first customer and do confluent state transition at t2
@@ -83,12 +83,13 @@ class ClerkModelTest {
     Customer outCustomer2 = ClerkModel.clerkOutputPort.getValue(outBag2.get(0));
     assertEquals(2.0, outCustomer2.getTleave(), 0.01);
 
+
     Customer inCustomer2 = Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build();
-    clerkModel.confluentStateTransitionFunction(DoubleSimTime.create(2.0),
+    clerkModel.confluentStateTransitionFunction(
         List.of(ClerkModel.clerkInputPort.createPortValue(inCustomer2)));
 
     // Next transition should be at t = 6
-    DoubleSimTime t4 = clerkModel.timeAdvanceFunction(DoubleSimTime.create(2.0));
+    DoubleSimTime t4 = clerkModel.timeAdvanceFunction();
     assertEquals(4.0, t4.getT(), 0.01);
 
     List<PortValue<?>> outBag6 = clerkModel.outputFunction();
