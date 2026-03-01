@@ -322,7 +322,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     ActorRef<DevsMessage> storeObserverSimulator =
         getContext().spawn(PDevsSimulator.create(storeObserver, t0), "storeObserver");
 
-    PDevsCouplings storeCouplings = PDevsCouplings.builder()
+    PDevsCouplings storeCouplings = PDevsCouplings.builder("storeCoordinator")
         .addConnection(ModelStructure.clerk, ClerkModel.clerkOutputPort.getPortName(),
             ModelStructure.storeObserver, StoreObserver.observerInputPort.getPortName())
         .addConnection(ModelStructure.customerGenerator, CustomerGenerator.generatorOutputPort.getPortName(),

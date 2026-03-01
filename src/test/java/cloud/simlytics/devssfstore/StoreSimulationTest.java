@@ -139,7 +139,7 @@ public class StoreSimulationTest {
       ActorRef<DevsMessage> storeObserverSimulator =
           testKit.spawn(PDevsSimulator.create(storeObserver, t0), "storeObserver");
 
-      PDevsCouplings storeCouplings = PDevsCouplings.builder()
+      PDevsCouplings storeCouplings = PDevsCouplings.builder("storeCoordinator")
           .addConnection(ModelStructure.clerk, ClerkModel.clerkOutputPort.getPortName(),
               ModelStructure.storeObserver, StoreObserver.observerInputPort.getPortName())
           .addConnection(ModelStructure.customerGenerator, CustomerGenerator.generatorOutputPort.getPortName(),
