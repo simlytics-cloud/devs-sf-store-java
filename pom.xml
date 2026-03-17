@@ -124,9 +124,14 @@
     </dependency>
     <dependency>
       <groupId>cloud.simlytics</groupId>
-      <artifactId>devs-streaming</artifactId>
-      <version>3.0</version>
+      <artifactId>devs-streaming-core</artifactId>
+      <version>4.0</version>
     </dependency>
+      <dependency>
+          <groupId>cloud.simlytics</groupId>
+          <artifactId>devs-streaming-kafka</artifactId>
+          <version>4.0</version>
+      </dependency>
   </dependencies>
 
   <build>
@@ -144,6 +149,15 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.14.1</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.immutables</groupId>
+                <artifactId>value</artifactId>
+                <version>2.12.0</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
