@@ -71,7 +71,7 @@ public class CustomerTest {
         .payload(ExecuteTransitionPayload.builder()
             .addInputs(pv)
             .build())
-        .simulationId("CustomerTest")
+        .simulationRunId("CustomerTest")
         .messageId("ExecuteTransition")
         .senderId("Test")
         .receiverId("clerk1")

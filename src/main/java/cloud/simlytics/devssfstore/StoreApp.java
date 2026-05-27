@@ -352,7 +352,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     getContext().watch(rootCoordinator);
     rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
         .eventTime(DoubleSimTime.create(0.0))
-        .simulationId(simulationId)
+        .simulationRunId(simulationId)
         .messageId(java.util.UUID.randomUUID().toString())
         .senderId("StoreApp")
         .receiverId("root")

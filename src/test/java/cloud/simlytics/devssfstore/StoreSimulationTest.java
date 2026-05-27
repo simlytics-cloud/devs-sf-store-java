@@ -164,7 +164,7 @@ public class StoreSimulationTest {
 
       rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
           .eventTime(DoubleSimTime.create(0.0))
-          .simulationId("StoreSimulationTest")
+          .simulationRunId("StoreSimulationTest")
           .messageId("SimulationInit")
           .senderId("TestActor")
           .receiverId("root")
