@@ -24,12 +24,15 @@ import devs.PDevsCouplings;
 import devs.PDevsCouplings.Connection;
 import devs.PDevsSimulator;
 import devs.RootCoordinator;
+import devs.StepTimingTracker;
 import devs.iso.DevsMessage;
 import devs.iso.SimulationInit;
 import devs.iso.time.DoubleSimTime;
 import devs.iso.time.LongSimTime;
 import devs.proxy.KafkaDevsStreamProxy;
+import devs.proxy.KafkaLocalProxy;
 import devs.proxy.KafkaReceiver;
+import devs.proxy.KafkaLocalProxy.ProxyProperties;
 import devs.utils.ConfigUtils;
 import devs.utils.KafkaUtils;
 import devs.utils.Schedule;
@@ -314,9 +317,12 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     ActorRef<DevsMessage> customerSimulator =
         getContext().spawn(PDevsSimulator.create(customerGenerator, t0), "customerGenerator");
 
+    // ActorRef<DevsMessage> clerkProxy = getContext().spawn(
+    //     KafkaDevsStreamProxy.create("clerk1", clerkInputTopic,
+    //         kafkaClusterConfig), "clerkProxy");
+    ProxyProperties proxyProperties = new ProxyProperties("storeCoordinator", clerkInputTopic, kafkaClusterConfig, "clerk1", storeCoordinatorInputTopic, kafkaConsumerConfig);
     ActorRef<DevsMessage> clerkProxy = getContext().spawn(
-        KafkaDevsStreamProxy.create("clerk1", clerkInputTopic,
-            kafkaClusterConfig), "clerkProxy");
+        KafkaLocalProxy.create(proxyProperties), "clerkProxy");
 
     StoreObserver storeObserver = new StoreObserver(null);
     ActorRef<DevsMessage> storeObserverSimulator =
@@ -335,7 +341,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = getContext().spawn(PDevsCoordinator.create(
-            "storeCoordinator", modelSimulators, storeCouplings),
+            "storeCoordinator", modelSimulators, storeCouplings, StepTimingTracker.enabled(System::nanoTime)),
         "storeCoordinator");
 
     if (runLocal) {
@@ -345,9 +351,9 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     ActorRef<DevsMessage> rootCoordinator = getContext().spawn(RootCoordinator.create(
         DoubleSimTime.builder().t(50.0).build(), storeCoordinator, "storeCoordinator"), "rootCoordinator");
 
-    ActorRef<DevsMessage> storeCoordinatorReceiver = getContext().spawn(
-        KafkaReceiver.create(storeCoordinator, rootCoordinator, "storeCoordinator" ,kafkaConsumerConfig,
-            storeCoordinatorInputTopic), "storeCoordinatorReceiver");
+    // ActorRef<DevsMessage> storeCoordinatorReceiver = getContext().spawn(
+    //     KafkaReceiver.create(storeCoordinator, rootCoordinator, "storeCoordinator" ,kafkaConsumerConfig,
+    //         storeCoordinatorInputTopic), "storeCoordinatorReceiver");
 
     getContext().watch(rootCoordinator);
     rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
