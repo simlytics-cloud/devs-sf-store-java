@@ -79,8 +79,9 @@ import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
 public class StoreApp extends AbstractBehavior<StoreAppMessage> {
 
   private static final String simulationId = "BusyMartSimulation";
-  private static final String clerkInputTopic = simulationId + "-Store";
-  private static final String storeCoordinatorInputTopic = simulationId + "-Store";
+  private static final String topic = simulationId;
+  private final static String runId = "test-run-003";
+
 
   public static final class ModelStructure {
     public static final String customerGenerator = "customerGenerator";
@@ -269,12 +270,12 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
 
     ActorRef<DevsMessage> coordinatorProxy =
         getContext().spawn(
-            KafkaDevsStreamProxy.create("storeCoordinator", storeCoordinatorInputTopic,
+            KafkaDevsStreamProxy.create("storeCoordinator", runId, topic,
                 kafkaClusterConfig), "storeCoordinatorProxy");
 
     ActorRef<DevsMessage> clerk1Receiver = getContext().spawn(
-        KafkaReceiver.create(clerk1Simulator, coordinatorProxy, "clerk1", kafkaConsumerConfig,
-            clerkInputTopic), "clerk1Receiver");
+        KafkaReceiver.create(clerk1Simulator, coordinatorProxy, "clerk1", runId, kafkaConsumerConfig,
+            topic), "clerk1Receiver");
   }
 
   /**
@@ -320,7 +321,8 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     // ActorRef<DevsMessage> clerkProxy = getContext().spawn(
     //     KafkaDevsStreamProxy.create("clerk1", clerkInputTopic,
     //         kafkaClusterConfig), "clerkProxy");
-    ProxyProperties proxyProperties = new ProxyProperties("storeCoordinator", clerkInputTopic, kafkaClusterConfig, "clerk1", storeCoordinatorInputTopic, kafkaConsumerConfig);
+    ProxyProperties proxyProperties = new ProxyProperties(runId, "storeCoordinator", topic,
+            kafkaClusterConfig, "clerk1", topic, kafkaConsumerConfig);
     ActorRef<DevsMessage> clerkProxy = getContext().spawn(
         KafkaLocalProxy.create(proxyProperties), "clerkProxy");
 
@@ -341,7 +343,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     modelSimulators.put(storeObserver.getModelIdentifier(), storeObserverSimulator);
 
     ActorRef<DevsMessage> storeCoordinator = getContext().spawn(PDevsCoordinator.create(
-            "storeCoordinator", modelSimulators, storeCouplings, StepTimingTracker.enabled(System::nanoTime)),
+            "storeCoordinator", modelSimulators, storeCouplings),
         "storeCoordinator");
 
     if (runLocal) {
@@ -358,7 +360,7 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
     getContext().watch(rootCoordinator);
     rootCoordinator.tell(SimulationInit.<DoubleSimTime>builder()
         .eventTime(DoubleSimTime.create(0.0))
-        .simulationRunId(simulationId)
+        .simulationRunId(runId)
         .messageId(java.util.UUID.randomUUID().toString())
         .senderId("StoreApp")
         .receiverId("root")
