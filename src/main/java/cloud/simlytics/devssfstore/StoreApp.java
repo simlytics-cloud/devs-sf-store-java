@@ -78,9 +78,9 @@ import org.apache.pekko.actor.typed.javadsl.ReceiveBuilder;
  */
 public class StoreApp extends AbstractBehavior<StoreAppMessage> {
 
-  private static final String simulationId = "BusyMartSimulation";
-  private static final String topic = simulationId;
-  private final static String runId = "test-run-003";
+  private static String simulationId = "BusyMartSimulation";
+  private static String topic = simulationId;
+  private static String runId = "test-run-001";
 
 
   public static final class ModelStructure {
@@ -180,6 +180,13 @@ public class StoreApp extends AbstractBehavior<StoreAppMessage> {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     Config config = ConfigFactory.load();
     runLocal = config.getBoolean("store-app.run-local");
+    if (config.hasPath("store-app.simulationId")) {
+      simulationId = config.getString("store-app.simulationId");
+      topic = simulationId;
+    }
+    if (config.hasPath("store-app.runId")) {
+      runId = config.getString("store-app.runId");
+    }
     kafkaClusterConfig = config.getConfig("kafka-cluster");
     kafkaConsumerConfig = config.getConfig("kafka-readall-consumer");
     Properties kafkaClusterProperties = ConfigUtils.toProperties(kafkaClusterConfig);
