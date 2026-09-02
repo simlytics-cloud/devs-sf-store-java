@@ -17,9 +17,9 @@ package cloud.simlytics.devssfstore;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import devs.msg.Bag;
-import devs.msg.PortValue;
-import devs.msg.time.DoubleSimTime;
+import devs.iso.PortValue;
+import devs.iso.time.DoubleSimTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -67,34 +67,33 @@ class ClerkModelTest {
     DoubleSimTime t1 = DoubleSimTime.builder().t(1.0).build();
 
     // next time should be max value
-    assert clerkModel.timeAdvanceFunction(t1).getT() == Double.MAX_VALUE;
+    assert clerkModel.timeAdvanceFunction().getT() == Double.MAX_VALUE;
 
     // Send first customer
     Customer customer1 = Customer.builder().twait(1.0).tenter(1.0).tleave(0.0).build();
     PortValue<Customer> pv = ClerkModel.clerkInputPort.createPortValue(customer1);
-    Bag bag1 = Bag.builder().addPortValueList(pv).build();
-    clerkModel.externalStateTransitionFunction(t1, bag1);
+    clerkModel.externalStateTransitionFunction(t1, List.of(pv));
 
     // Next time should be 2
-    DoubleSimTime t = clerkModel.timeAdvanceFunction(t1);
+    DoubleSimTime t = clerkModel.timeAdvanceFunction();
     assertEquals(1.0, t.getT(), 0.01);
 
     // Output first customer and do confluent state transition at t2
-    Bag outBag2 = clerkModel.outputFunction();
-    Customer outCustomer2 = ClerkModel.clerkOutputPort.getValue(outBag2.getPortValueList().get(0));
+    List<PortValue<?>> outBag2 = clerkModel.outputFunction();
+    Customer outCustomer2 = ClerkModel.clerkOutputPort.getValue(outBag2.get(0));
     assertEquals(2.0, outCustomer2.getTleave(), 0.01);
 
+
     Customer inCustomer2 = Customer.builder().twait(4.0).tenter(2.0).tleave(0.0).build();
-    Bag inBag2 = Bag.builder().addPortValueList(
-        ClerkModel.clerkInputPort.createPortValue(inCustomer2)).build();
-    clerkModel.confluentStateTransitionFunction(DoubleSimTime.create(2.0), inBag2);
+    clerkModel.confluentStateTransitionFunction(
+        List.of(ClerkModel.clerkInputPort.createPortValue(inCustomer2)));
 
     // Next transition should be at t = 6
-    DoubleSimTime t4 = clerkModel.timeAdvanceFunction(DoubleSimTime.create(2.0));
+    DoubleSimTime t4 = clerkModel.timeAdvanceFunction();
     assertEquals(4.0, t4.getT(), 0.01);
 
-    Bag outBag6 = clerkModel.outputFunction();
-    Customer outCustomer6 = ClerkModel.clerkOutputPort.getValue(outBag6.getPortValueList().get(0));
+    List<PortValue<?>> outBag6 = clerkModel.outputFunction();
+    Customer outCustomer6 = ClerkModel.clerkOutputPort.getValue(outBag6.get(0));
     assertEquals(6.0, outCustomer6.getTleave(), 0.01);
   }
 

@@ -50,8 +50,8 @@ import org.junit.jupiter.api.Test;
  */
 public class DeleteCreateTopicsTest {
 
-  private static final String clerkInputTopic = "clerk1";
-  private static final String storeCoordinatorInputTopic = "storeCoordinator";
+  private static String simulationId = "BusyMartSimulation";
+  private static String topic = simulationId;
 
   /**
    * Deletes and re-creates specified Kafka topics for testing purposes.
@@ -78,18 +78,23 @@ public class DeleteCreateTopicsTest {
    * @throws InterruptedException if the thread sleep is interrupted.
    * @throws ExecutionException   if an error occurs during Kafka Admin operations.
    */
-  @Disabled("Requires Kafka connection")
+  //@Disabled("Requires Kafka connection")
   @Test
   @DisplayName("Delete and create topics")
+  @Disabled("Requires Kafka connection")
   void deleteAndCreateTopics() throws InterruptedException, ExecutionException {
     Config config = ConfigFactory.load();
     Config kafkaClusterConfig = config.getConfig("kafka-cluster");
     Properties kafkaClusterProperties = ConfigUtils.toProperties(kafkaClusterConfig);
+    if (config.hasPath("store-app.simulationId")) {
+      simulationId = config.getString("store-app.simulationId");
+      topic = simulationId;
+    }
     AdminClient adminClient = KafkaUtils.createAdminClient(kafkaClusterProperties);
     KafkaUtils.deleteTopics(
-        Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic), adminClient);
+        Arrays.asList(topic), adminClient);
     Thread.sleep(5000);
-    KafkaUtils.createTopics(Arrays.asList(clerkInputTopic, storeCoordinatorInputTopic),
+    KafkaUtils.createTopics(Arrays.asList(topic),
         adminClient, Optional.of(1), Optional.empty());
   }
 }
