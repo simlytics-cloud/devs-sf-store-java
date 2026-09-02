@@ -27,6 +27,7 @@ Run this project using the mvn exec:java command:
 
 `mvn exec:java -Dexec.mainClass="cloud.simlytics.devssfstore.StoreApp"`
 
+```
 The expected output will be:
 Customer leaving at 2.0 after a wait of 1.0
 Customer leaving at 6.0 after a wait of 4.0
@@ -36,5 +37,5 @@ Customer leaving at 22.0 after a wait of 10.0
 Customer leaving at 42.0 after a wait of 20.0
 Customer leaving at 44.0 after a wait of 2.0
 Customer leaving at 45.0 after a wait of 1.0
-
+```
 You can view the configured Kafka topic to see the DEVS messages sent to and from the remote clerk.
